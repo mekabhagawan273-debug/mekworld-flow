@@ -29,7 +29,7 @@ function Reports() {
     <div>
       <PageHeader title="Reports" subtitle="Export operational reports to Excel or PDF" />
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {REPORTS.map((r) => <ReportCard key={r.key} {...r} />)}
+        {REPORTS.map((r) => <ReportCard key={r.key} table={r.key} title={r.title} desc={r.desc} />)}
       </div>
     </div>
   );

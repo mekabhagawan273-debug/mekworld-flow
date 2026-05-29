@@ -9,51 +9,341 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppStoreRouteImport } from './routes/_app/store'
+import { Route as AppShipmentsRouteImport } from './routes/_app/shipments'
+import { Route as AppReportsRouteImport } from './routes/_app/reports'
+import { Route as AppHrRouteImport } from './routes/_app/hr'
+import { Route as AppAdminRouteImport } from './routes/_app/admin'
+import { Route as AppShrimpQcRouteImport } from './routes/_app/shrimp.qc'
+import { Route as AppShrimpIntakeRouteImport } from './routes/_app/shrimp.intake'
+import { Route as AppShrimpColdStorageRouteImport } from './routes/_app/shrimp.cold-storage'
+import { Route as AppShrimpBatchesRouteImport } from './routes/_app/shrimp.batches'
+import { Route as AppSecurityVisitorsRouteImport } from './routes/_app/security.visitors'
+import { Route as AppSecurityIncidentsRouteImport } from './routes/_app/security.incidents'
 
-const IndexRoute = IndexRouteImport.update({
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStoreRoute = AppStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShipmentsRoute = AppShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrRoute = AppHrRouteImport.update({
+  id: '/hr',
+  path: '/hr',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpQcRoute = AppShrimpQcRouteImport.update({
+  id: '/shrimp/qc',
+  path: '/shrimp/qc',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpIntakeRoute = AppShrimpIntakeRouteImport.update({
+  id: '/shrimp/intake',
+  path: '/shrimp/intake',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpColdStorageRoute = AppShrimpColdStorageRouteImport.update({
+  id: '/shrimp/cold-storage',
+  path: '/shrimp/cold-storage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpBatchesRoute = AppShrimpBatchesRouteImport.update({
+  id: '/shrimp/batches',
+  path: '/shrimp/batches',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSecurityVisitorsRoute = AppSecurityVisitorsRouteImport.update({
+  id: '/security/visitors',
+  path: '/security/visitors',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSecurityIncidentsRoute = AppSecurityIncidentsRouteImport.update({
+  id: '/security/incidents',
+  path: '/security/incidents',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
+  '/login': typeof LoginRoute
+  '/admin': typeof AppAdminRoute
+  '/hr': typeof AppHrRoute
+  '/reports': typeof AppReportsRoute
+  '/shipments': typeof AppShipmentsRoute
+  '/store': typeof AppStoreRoute
+  '/security/incidents': typeof AppSecurityIncidentsRoute
+  '/security/visitors': typeof AppSecurityVisitorsRoute
+  '/shrimp/batches': typeof AppShrimpBatchesRoute
+  '/shrimp/cold-storage': typeof AppShrimpColdStorageRoute
+  '/shrimp/intake': typeof AppShrimpIntakeRoute
+  '/shrimp/qc': typeof AppShrimpQcRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/admin': typeof AppAdminRoute
+  '/hr': typeof AppHrRoute
+  '/reports': typeof AppReportsRoute
+  '/shipments': typeof AppShipmentsRoute
+  '/store': typeof AppStoreRoute
+  '/': typeof AppIndexRoute
+  '/security/incidents': typeof AppSecurityIncidentsRoute
+  '/security/visitors': typeof AppSecurityVisitorsRoute
+  '/shrimp/batches': typeof AppShrimpBatchesRoute
+  '/shrimp/cold-storage': typeof AppShrimpColdStorageRoute
+  '/shrimp/intake': typeof AppShrimpIntakeRoute
+  '/shrimp/qc': typeof AppShrimpQcRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_app/admin': typeof AppAdminRoute
+  '/_app/hr': typeof AppHrRoute
+  '/_app/reports': typeof AppReportsRoute
+  '/_app/shipments': typeof AppShipmentsRoute
+  '/_app/store': typeof AppStoreRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/security/incidents': typeof AppSecurityIncidentsRoute
+  '/_app/security/visitors': typeof AppSecurityVisitorsRoute
+  '/_app/shrimp/batches': typeof AppShrimpBatchesRoute
+  '/_app/shrimp/cold-storage': typeof AppShrimpColdStorageRoute
+  '/_app/shrimp/intake': typeof AppShrimpIntakeRoute
+  '/_app/shrimp/qc': typeof AppShrimpQcRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/admin'
+    | '/hr'
+    | '/reports'
+    | '/shipments'
+    | '/store'
+    | '/security/incidents'
+    | '/security/visitors'
+    | '/shrimp/batches'
+    | '/shrimp/cold-storage'
+    | '/shrimp/intake'
+    | '/shrimp/qc'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/login'
+    | '/admin'
+    | '/hr'
+    | '/reports'
+    | '/shipments'
+    | '/store'
+    | '/'
+    | '/security/incidents'
+    | '/security/visitors'
+    | '/shrimp/batches'
+    | '/shrimp/cold-storage'
+    | '/shrimp/intake'
+    | '/shrimp/qc'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/login'
+    | '/_app/admin'
+    | '/_app/hr'
+    | '/_app/reports'
+    | '/_app/shipments'
+    | '/_app/store'
+    | '/_app/'
+    | '/_app/security/incidents'
+    | '/_app/security/visitors'
+    | '/_app/shrimp/batches'
+    | '/_app/shrimp/cold-storage'
+    | '/_app/shrimp/intake'
+    | '/_app/shrimp/qc'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/store': {
+      id: '/_app/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof AppStoreRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shipments': {
+      id: '/_app/shipments'
+      path: '/shipments'
+      fullPath: '/shipments'
+      preLoaderRoute: typeof AppShipmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/reports': {
+      id: '/_app/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr': {
+      id: '/_app/hr'
+      path: '/hr'
+      fullPath: '/hr'
+      preLoaderRoute: typeof AppHrRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/qc': {
+      id: '/_app/shrimp/qc'
+      path: '/shrimp/qc'
+      fullPath: '/shrimp/qc'
+      preLoaderRoute: typeof AppShrimpQcRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/intake': {
+      id: '/_app/shrimp/intake'
+      path: '/shrimp/intake'
+      fullPath: '/shrimp/intake'
+      preLoaderRoute: typeof AppShrimpIntakeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/cold-storage': {
+      id: '/_app/shrimp/cold-storage'
+      path: '/shrimp/cold-storage'
+      fullPath: '/shrimp/cold-storage'
+      preLoaderRoute: typeof AppShrimpColdStorageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/batches': {
+      id: '/_app/shrimp/batches'
+      path: '/shrimp/batches'
+      fullPath: '/shrimp/batches'
+      preLoaderRoute: typeof AppShrimpBatchesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/security/visitors': {
+      id: '/_app/security/visitors'
+      path: '/security/visitors'
+      fullPath: '/security/visitors'
+      preLoaderRoute: typeof AppSecurityVisitorsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/security/incidents': {
+      id: '/_app/security/incidents'
+      path: '/security/incidents'
+      fullPath: '/security/incidents'
+      preLoaderRoute: typeof AppSecurityIncidentsRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppAdminRoute: typeof AppAdminRoute
+  AppHrRoute: typeof AppHrRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppShipmentsRoute: typeof AppShipmentsRoute
+  AppStoreRoute: typeof AppStoreRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppSecurityIncidentsRoute: typeof AppSecurityIncidentsRoute
+  AppSecurityVisitorsRoute: typeof AppSecurityVisitorsRoute
+  AppShrimpBatchesRoute: typeof AppShrimpBatchesRoute
+  AppShrimpColdStorageRoute: typeof AppShrimpColdStorageRoute
+  AppShrimpIntakeRoute: typeof AppShrimpIntakeRoute
+  AppShrimpQcRoute: typeof AppShrimpQcRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAdminRoute: AppAdminRoute,
+  AppHrRoute: AppHrRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppShipmentsRoute: AppShipmentsRoute,
+  AppStoreRoute: AppStoreRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppSecurityIncidentsRoute: AppSecurityIncidentsRoute,
+  AppSecurityVisitorsRoute: AppSecurityVisitorsRoute,
+  AppShrimpBatchesRoute: AppShrimpBatchesRoute,
+  AppShrimpColdStorageRoute: AppShrimpColdStorageRoute,
+  AppShrimpIntakeRoute: AppShrimpIntakeRoute,
+  AppShrimpQcRoute: AppShrimpQcRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
