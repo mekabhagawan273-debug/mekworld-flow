@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          attendance_date: string
+          created_at: string
+          employee_id: string | null
+          hours_worked: number | null
+          id: string
+          notes: string | null
+          shift: string | null
+          status: string
+        }
+        Insert: {
+          attendance_date?: string
+          created_at?: string
+          employee_id?: string | null
+          hours_worked?: number | null
+          id?: string
+          notes?: string | null
+          shift?: string | null
+          status?: string
+        }
+        Update: {
+          attendance_date?: string
+          created_at?: string
+          employee_id?: string | null
+          hours_worked?: number | null
+          id?: string
+          notes?: string | null
+          shift?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cold_storage: {
         Row: {
           best_before: string | null
@@ -59,6 +100,87 @@ export type Database = {
         }
         Relationships: []
       }
+      customers: {
+        Row: {
+          address: string | null
+          contact_person: string | null
+          country: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      employees: {
+        Row: {
+          created_at: string
+          date_of_joining: string | null
+          department: string | null
+          designation: string | null
+          email: string | null
+          emp_code: string
+          emp_type: string
+          full_name: string
+          id: string
+          phone: string | null
+          salary: number | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          date_of_joining?: string | null
+          department?: string | null
+          designation?: string | null
+          email?: string | null
+          emp_code: string
+          emp_type?: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          salary?: number | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          date_of_joining?: string | null
+          department?: string | null
+          designation?: string | null
+          email?: string | null
+          emp_code?: string
+          emp_type?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          salary?: number | null
+          status?: string
+        }
+        Relationships: []
+      }
       incidents: {
         Row: {
           action_taken: string | null
@@ -95,6 +217,42 @@ export type Database = {
           persons_involved?: string | null
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      materials: {
+        Row: {
+          category: string
+          code: string
+          created_at: string
+          current_stock: number
+          id: string
+          min_stock: number | null
+          name: string
+          unit_cost: number | null
+          uom: string
+        }
+        Insert: {
+          category?: string
+          code: string
+          created_at?: string
+          current_stock?: number
+          id?: string
+          min_stock?: number | null
+          name: string
+          unit_cost?: number | null
+          uom?: string
+        }
+        Update: {
+          category?: string
+          code?: string
+          created_at?: string
+          current_stock?: number
+          id?: string
+          min_stock?: number | null
+          name?: string
+          unit_cost?: number | null
+          uom?: string
         }
         Relationships: []
       }
@@ -258,6 +416,86 @@ export type Database = {
           },
         ]
       }
+      shipments: {
+        Row: {
+          bl_no: string | null
+          container_no: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          customer_id: string | null
+          destination_country: string | null
+          documents_status: string | null
+          eta: string | null
+          id: string
+          invoice_value: number | null
+          notes: string | null
+          port_of_discharge: string | null
+          port_of_loading: string | null
+          ship_date: string | null
+          shipment_no: string
+          status: string
+          total_cartons: number | null
+          total_quantity_kg: number | null
+          updated_at: string
+          vessel_name: string | null
+        }
+        Insert: {
+          bl_no?: string | null
+          container_no?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          customer_id?: string | null
+          destination_country?: string | null
+          documents_status?: string | null
+          eta?: string | null
+          id?: string
+          invoice_value?: number | null
+          notes?: string | null
+          port_of_discharge?: string | null
+          port_of_loading?: string | null
+          ship_date?: string | null
+          shipment_no?: string
+          status?: string
+          total_cartons?: number | null
+          total_quantity_kg?: number | null
+          updated_at?: string
+          vessel_name?: string | null
+        }
+        Update: {
+          bl_no?: string | null
+          container_no?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          customer_id?: string | null
+          destination_country?: string | null
+          documents_status?: string | null
+          eta?: string | null
+          id?: string
+          invoice_value?: number | null
+          notes?: string | null
+          port_of_discharge?: string | null
+          port_of_loading?: string | null
+          ship_date?: string | null
+          shipment_no?: string
+          status?: string
+          total_cartons?: number | null
+          total_quantity_kg?: number | null
+          updated_at?: string
+          vessel_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shrimp_intake: {
         Row: {
           created_at: string
@@ -312,6 +550,96 @@ export type Database = {
           total_cost?: number | null
           updated_at?: string
           vehicle_number?: string | null
+        }
+        Relationships: []
+      }
+      stock_movements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          material_id: string | null
+          movement_date: string
+          movement_type: string
+          notes: string | null
+          quantity: number
+          reference_no: string | null
+          supplier_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          material_id?: string | null
+          movement_date?: string
+          movement_type: string
+          notes?: string | null
+          quantity: number
+          reference_no?: string | null
+          supplier_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          material_id?: string | null
+          movement_date?: string
+          movement_type?: string
+          notes?: string | null
+          quantity?: number
+          reference_no?: string | null
+          supplier_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_movements_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suppliers: {
+        Row: {
+          address: string | null
+          contact_person: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+          supplier_type: string
+        }
+        Insert: {
+          address?: string | null
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+          supplier_type?: string
+        }
+        Update: {
+          address?: string | null
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+          supplier_type?: string
         }
         Relationships: []
       }
