@@ -35,7 +35,7 @@ function Reports() {
   );
 }
 
-function ReportCard({ key: table, title, desc }: { key: string; title: string; desc: string }) {
+function ReportCard({ table, title, desc }: { table: string; title: string; desc: string }) {
   const { data = [] } = useQuery({
     queryKey: ["report", table],
     queryFn: async () => {
