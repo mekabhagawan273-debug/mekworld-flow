@@ -181,6 +181,140 @@ export type Database = {
         }
         Relationships: []
       }
+      expenses: {
+        Row: {
+          amount: number
+          bill_url: string | null
+          category: string
+          created_at: string
+          description: string | null
+          expense_date: string
+          id: string
+          paid_by: string | null
+        }
+        Insert: {
+          amount?: number
+          bill_url?: string | null
+          category: string
+          created_at?: string
+          description?: string | null
+          expense_date?: string
+          id?: string
+          paid_by?: string | null
+        }
+        Update: {
+          amount?: number
+          bill_url?: string | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          expense_date?: string
+          id?: string
+          paid_by?: string | null
+        }
+        Relationships: []
+      }
+      floor_balance_entries: {
+        Row: {
+          created_at: string
+          entry_type: string
+          id: string
+          material_id: string | null
+          quantity: number
+          recorded_by: string | null
+          recorded_by_name: string | null
+          remarks: string | null
+          shift: string | null
+        }
+        Insert: {
+          created_at?: string
+          entry_type: string
+          id?: string
+          material_id?: string | null
+          quantity: number
+          recorded_by?: string | null
+          recorded_by_name?: string | null
+          remarks?: string | null
+          shift?: string | null
+        }
+        Update: {
+          created_at?: string
+          entry_type?: string
+          id?: string
+          material_id?: string | null
+          quantity?: number
+          recorded_by?: string | null
+          recorded_by_name?: string | null
+          remarks?: string | null
+          shift?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "floor_balance_entries_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      floor_balance_snapshots: {
+        Row: {
+          created_at: string
+          id: string
+          shift: string
+          signed_at: string
+          snapshot_data: Json
+          snapshot_date: string
+          supervisor_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          shift: string
+          signed_at?: string
+          snapshot_data: Json
+          snapshot_date?: string
+          supervisor_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          shift?: string
+          signed_at?: string
+          snapshot_data?: Json
+          snapshot_date?: string
+          supervisor_name?: string
+        }
+        Relationships: []
+      }
+      ice_log: {
+        Row: {
+          created_at: string
+          ice_consumed_kg: number | null
+          ice_produced_kg: number | null
+          id: string
+          log_date: string
+          recorded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          ice_consumed_kg?: number | null
+          ice_produced_kg?: number | null
+          id?: string
+          log_date?: string
+          recorded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          ice_consumed_kg?: number | null
+          ice_produced_kg?: number | null
+          id?: string
+          log_date?: string
+          recorded_by?: string | null
+        }
+        Relationships: []
+      }
       incidents: {
         Row: {
           action_taken: string | null
@@ -253,6 +387,474 @@ export type Database = {
           name?: string
           unit_cost?: number | null
           uom?: string
+        }
+        Relationships: []
+      }
+      plant_breakdowns: {
+        Row: {
+          corrective_action: string | null
+          created_at: string
+          id: string
+          issue: string | null
+          machine_name: string | null
+          plant_id: string | null
+          resolved_time: string | null
+          root_cause: string | null
+          start_time: string
+          technician: string | null
+        }
+        Insert: {
+          corrective_action?: string | null
+          created_at?: string
+          id?: string
+          issue?: string | null
+          machine_name?: string | null
+          plant_id?: string | null
+          resolved_time?: string | null
+          root_cause?: string | null
+          start_time?: string
+          technician?: string | null
+        }
+        Update: {
+          corrective_action?: string | null
+          created_at?: string
+          id?: string
+          issue?: string | null
+          machine_name?: string | null
+          plant_id?: string | null
+          resolved_time?: string | null
+          root_cause?: string | null
+          start_time?: string
+          technician?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_breakdowns_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plant_consumption_log: {
+        Row: {
+          created_at: string
+          energy_kwh: number | null
+          id: string
+          log_date: string
+          plant_id: string | null
+          recorded_by: string | null
+          water_kl: number | null
+        }
+        Insert: {
+          created_at?: string
+          energy_kwh?: number | null
+          id?: string
+          log_date?: string
+          plant_id?: string | null
+          recorded_by?: string | null
+          water_kl?: number | null
+        }
+        Update: {
+          created_at?: string
+          energy_kwh?: number | null
+          id?: string
+          log_date?: string
+          plant_id?: string | null
+          recorded_by?: string | null
+          water_kl?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_consumption_log_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plant_machines: {
+        Row: {
+          created_at: string
+          id: string
+          last_service_date: string | null
+          machine_name: string
+          make_model: string | null
+          next_service_due: string | null
+          plant_id: string | null
+          serial_no: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_service_date?: string | null
+          machine_name: string
+          make_model?: string | null
+          next_service_due?: string | null
+          plant_id?: string | null
+          serial_no?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_service_date?: string | null
+          machine_name?: string
+          make_model?: string | null
+          next_service_due?: string | null
+          plant_id?: string | null
+          serial_no?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_machines_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plant_production_log: {
+        Row: {
+          actual_kg: number | null
+          created_at: string
+          id: string
+          log_date: string
+          planned_kg: number | null
+          plant_id: string | null
+          recorded_by: string | null
+        }
+        Insert: {
+          actual_kg?: number | null
+          created_at?: string
+          id?: string
+          log_date?: string
+          planned_kg?: number | null
+          plant_id?: string | null
+          recorded_by?: string | null
+        }
+        Update: {
+          actual_kg?: number | null
+          created_at?: string
+          id?: string
+          log_date?: string
+          planned_kg?: number | null
+          plant_id?: string | null
+          recorded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_production_log_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plants: {
+        Row: {
+          capacity: number | null
+          capacity_uom: string | null
+          commissioned_date: string | null
+          created_at: string
+          id: string
+          location: string | null
+          name: string
+          plant_code: string
+          plant_type: string
+          status: string
+          supervisor: string | null
+          total_workers: number | null
+        }
+        Insert: {
+          capacity?: number | null
+          capacity_uom?: string | null
+          commissioned_date?: string | null
+          created_at?: string
+          id?: string
+          location?: string | null
+          name: string
+          plant_code: string
+          plant_type?: string
+          status?: string
+          supervisor?: string | null
+          total_workers?: number | null
+        }
+        Update: {
+          capacity?: number | null
+          capacity_uom?: string | null
+          commissioned_date?: string | null
+          created_at?: string
+          id?: string
+          location?: string | null
+          name?: string
+          plant_code?: string
+          plant_type?: string
+          status?: string
+          supervisor?: string | null
+          total_workers?: number | null
+        }
+        Relationships: []
+      }
+      pond_feed_log: {
+        Row: {
+          created_at: string
+          feed_brand: string | null
+          feed_type: string | null
+          id: string
+          log_date: string
+          pond_id: string | null
+          quantity_kg: number | null
+          recorded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          feed_brand?: string | null
+          feed_type?: string | null
+          id?: string
+          log_date?: string
+          pond_id?: string | null
+          quantity_kg?: number | null
+          recorded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          feed_brand?: string | null
+          feed_type?: string | null
+          id?: string
+          log_date?: string
+          pond_id?: string | null
+          quantity_kg?: number | null
+          recorded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pond_feed_log_pond_id_fkey"
+            columns: ["pond_id"]
+            isOneToOne: false
+            referencedRelation: "ponds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pond_harvests: {
+        Row: {
+          count_per_kg: number | null
+          created_at: string
+          destination: string | null
+          harvest_date: string
+          id: string
+          pond_id: string | null
+          price_per_kg: number | null
+          total_value: number | null
+          total_weight_kg: number | null
+        }
+        Insert: {
+          count_per_kg?: number | null
+          created_at?: string
+          destination?: string | null
+          harvest_date?: string
+          id?: string
+          pond_id?: string | null
+          price_per_kg?: number | null
+          total_value?: number | null
+          total_weight_kg?: number | null
+        }
+        Update: {
+          count_per_kg?: number | null
+          created_at?: string
+          destination?: string | null
+          harvest_date?: string
+          id?: string
+          pond_id?: string | null
+          price_per_kg?: number | null
+          total_value?: number | null
+          total_weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pond_harvests_pond_id_fkey"
+            columns: ["pond_id"]
+            isOneToOne: false
+            referencedRelation: "ponds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pond_mortality: {
+        Row: {
+          action_taken: string | null
+          cause: string | null
+          created_at: string
+          estimated_count: number | null
+          id: string
+          log_date: string
+          pond_id: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          cause?: string | null
+          created_at?: string
+          estimated_count?: number | null
+          id?: string
+          log_date?: string
+          pond_id?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          cause?: string | null
+          created_at?: string
+          estimated_count?: number | null
+          id?: string
+          log_date?: string
+          pond_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pond_mortality_pond_id_fkey"
+            columns: ["pond_id"]
+            isOneToOne: false
+            referencedRelation: "ponds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pond_treatments: {
+        Row: {
+          applied_by: string | null
+          created_at: string
+          dosage: string | null
+          id: string
+          pond_id: string | null
+          product_name: string | null
+          reason: string | null
+          treatment_date: string
+        }
+        Insert: {
+          applied_by?: string | null
+          created_at?: string
+          dosage?: string | null
+          id?: string
+          pond_id?: string | null
+          product_name?: string | null
+          reason?: string | null
+          treatment_date?: string
+        }
+        Update: {
+          applied_by?: string | null
+          created_at?: string
+          dosage?: string | null
+          id?: string
+          pond_id?: string | null
+          product_name?: string | null
+          reason?: string | null
+          treatment_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pond_treatments_pond_id_fkey"
+            columns: ["pond_id"]
+            isOneToOne: false
+            referencedRelation: "ponds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pond_water_quality: {
+        Row: {
+          ammonia_mgl: number | null
+          created_at: string
+          do_mgl: number | null
+          id: string
+          log_date: string
+          ph: number | null
+          pond_id: string | null
+          recorded_by: string | null
+          salinity_ppt: number | null
+          temperature_c: number | null
+        }
+        Insert: {
+          ammonia_mgl?: number | null
+          created_at?: string
+          do_mgl?: number | null
+          id?: string
+          log_date?: string
+          ph?: number | null
+          pond_id?: string | null
+          recorded_by?: string | null
+          salinity_ppt?: number | null
+          temperature_c?: number | null
+        }
+        Update: {
+          ammonia_mgl?: number | null
+          created_at?: string
+          do_mgl?: number | null
+          id?: string
+          log_date?: string
+          ph?: number | null
+          pond_id?: string | null
+          recorded_by?: string | null
+          salinity_ppt?: number | null
+          temperature_c?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pond_water_quality_pond_id_fkey"
+            columns: ["pond_id"]
+            isOneToOne: false
+            referencedRelation: "ponds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ponds: {
+        Row: {
+          avg_body_weight_g: number | null
+          created_at: string
+          estimated_biomass_kg: number | null
+          fcr: number | null
+          id: string
+          name: string
+          pl_count: number | null
+          pond_code: string
+          pond_type: string
+          size_acres: number | null
+          species: string | null
+          status: string
+          stocking_date: string | null
+        }
+        Insert: {
+          avg_body_weight_g?: number | null
+          created_at?: string
+          estimated_biomass_kg?: number | null
+          fcr?: number | null
+          id?: string
+          name: string
+          pl_count?: number | null
+          pond_code: string
+          pond_type?: string
+          size_acres?: number | null
+          species?: string | null
+          status?: string
+          stocking_date?: string | null
+        }
+        Update: {
+          avg_body_weight_g?: number | null
+          created_at?: string
+          estimated_biomass_kg?: number | null
+          fcr?: number | null
+          id?: string
+          name?: string
+          pl_count?: number | null
+          pond_code?: string
+          pond_type?: string
+          size_acres?: number | null
+          species?: string | null
+          status?: string
+          stocking_date?: string | null
         }
         Relationships: []
       }
@@ -330,6 +932,42 @@ export type Database = {
           },
         ]
       }
+      production_costs: {
+        Row: {
+          batch_id: string | null
+          cost_per_kg: number | null
+          created_at: string
+          id: string
+          labour_cost: number | null
+          material_cost: number | null
+          output_kg: number | null
+          overhead_cost: number | null
+          total_cost: number | null
+        }
+        Insert: {
+          batch_id?: string | null
+          cost_per_kg?: number | null
+          created_at?: string
+          id?: string
+          labour_cost?: number | null
+          material_cost?: number | null
+          output_kg?: number | null
+          overhead_cost?: number | null
+          total_cost?: number | null
+        }
+        Update: {
+          batch_id?: string | null
+          cost_per_kg?: number | null
+          created_at?: string
+          id?: string
+          labour_cost?: number | null
+          material_cost?: number | null
+          output_kg?: number | null
+          overhead_cost?: number | null
+          total_cost?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -363,6 +1001,51 @@ export type Database = {
           is_active?: boolean
           phone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          amount: number
+          created_at: string
+          gst_amount: number | null
+          gst_pct: number | null
+          id: string
+          invoice_no: string | null
+          items: string | null
+          linked_inward_id: string | null
+          payment_status: string
+          purchase_date: string
+          supplier_name: string
+          total: number
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          gst_amount?: number | null
+          gst_pct?: number | null
+          id?: string
+          invoice_no?: string | null
+          items?: string | null
+          linked_inward_id?: string | null
+          payment_status?: string
+          purchase_date?: string
+          supplier_name: string
+          total?: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          gst_amount?: number | null
+          gst_pct?: number | null
+          id?: string
+          invoice_no?: string | null
+          items?: string | null
+          linked_inward_id?: string | null
+          payment_status?: string
+          purchase_date?: string
+          supplier_name?: string
+          total?: number
         }
         Relationships: []
       }
@@ -415,6 +1098,75 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      receivables: {
+        Row: {
+          amount_received: number | null
+          buyer: string
+          created_at: string
+          due_date: string | null
+          id: string
+          invoice_no: string | null
+          invoice_value_usd: number | null
+          shipment_id: string | null
+          status: string
+        }
+        Insert: {
+          amount_received?: number | null
+          buyer: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          invoice_no?: string | null
+          invoice_value_usd?: number | null
+          shipment_id?: string | null
+          status?: string
+        }
+        Update: {
+          amount_received?: number | null
+          buyer?: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          invoice_no?: string | null
+          invoice_value_usd?: number | null
+          shipment_id?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      scanned_documents: {
+        Row: {
+          created_at: string
+          document_type: string | null
+          document_url: string | null
+          extracted_data: Json | null
+          id: string
+          saved_record_id: string | null
+          target_module: string | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_type?: string | null
+          document_url?: string | null
+          extracted_data?: Json | null
+          id?: string
+          saved_record_id?: string | null
+          target_module?: string | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_type?: string | null
+          document_url?: string | null
+          extracted_data?: Json | null
+          id?: string
+          saved_record_id?: string | null
+          target_module?: string | null
+          uploaded_by?: string | null
+        }
+        Relationships: []
       }
       shipments: {
         Row: {
@@ -640,6 +1392,60 @@ export type Database = {
           name?: string
           phone?: string | null
           supplier_type?: string
+        }
+        Relationships: []
+      }
+      temperature_readings: {
+        Row: {
+          corrective_action: string | null
+          id: string
+          in_range: boolean | null
+          location_name: string
+          recorded_at: string
+          recorded_by: string | null
+          temperature_c: number
+        }
+        Insert: {
+          corrective_action?: string | null
+          id?: string
+          in_range?: boolean | null
+          location_name: string
+          recorded_at?: string
+          recorded_by?: string | null
+          temperature_c: number
+        }
+        Update: {
+          corrective_action?: string | null
+          id?: string
+          in_range?: boolean | null
+          location_name?: string
+          recorded_at?: string
+          recorded_by?: string | null
+          temperature_c?: number
+        }
+        Relationships: []
+      }
+      temperature_thresholds: {
+        Row: {
+          created_at: string
+          id: string
+          location_name: string
+          max_temp: number
+          min_temp: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location_name: string
+          max_temp: number
+          min_temp: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location_name?: string
+          max_temp?: number
+          min_temp?: number
         }
         Relationships: []
       }
