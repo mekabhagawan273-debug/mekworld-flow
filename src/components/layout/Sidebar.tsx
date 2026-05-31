@@ -2,7 +2,8 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Fish, Boxes, Snowflake, ShieldCheck, Truck,
   Users, FileBarChart, Settings, ClipboardList, AlertTriangle,
-  PackageOpen, Anchor, DoorOpen,
+  PackageOpen, Anchor, Scale, ScanLine, Waves, Factory, Wallet,
+  Thermometer, BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +13,10 @@ const groups: Array<{
 }> = [
   {
     label: "OVERVIEW",
-    items: [{ to: "/", icon: LayoutDashboard, label: "Dashboard" }],
+    items: [
+      { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+      { to: "/analytics", icon: BarChart3, label: "Executive Analytics" },
+    ],
   },
   {
     label: "SHRIMP PROCESSING",
@@ -21,6 +25,14 @@ const groups: Array<{
       { to: "/shrimp/batches", icon: ClipboardList, label: "Processing Batches" },
       { to: "/shrimp/qc", icon: ShieldCheck, label: "Quality Control" },
       { to: "/shrimp/cold-storage", icon: Snowflake, label: "Cold Storage" },
+      { to: "/temperature-log", icon: Thermometer, label: "Temperature Log" },
+    ],
+  },
+  {
+    label: "FARM & PLANT",
+    items: [
+      { to: "/ponds", icon: Waves, label: "Pond Management" },
+      { to: "/plants", icon: Factory, label: "Plant Management" },
     ],
   },
   {
@@ -34,14 +46,27 @@ const groups: Array<{
     label: "OPERATIONS",
     items: [
       { to: "/store", icon: Boxes, label: "Store & Materials" },
+      { to: "/floor-balance", icon: Scale, label: "Floor Balance" },
+      { to: "/scan-document", icon: ScanLine, label: "Scan Document" },
       { to: "/shipments", icon: Truck, label: "Shipments" },
       { to: "/hr", icon: PackageOpen, label: "HR & Manpower" },
-      { to: "/reports", icon: FileBarChart, label: "Reports" },
     ],
   },
   {
-    label: "ADMIN",
-    items: [{ to: "/admin", icon: Settings, label: "Admin Panel" }],
+    label: "ACCOUNTS",
+    items: [
+      { to: "/accounts/purchases", icon: Wallet, label: "Purchases" },
+      { to: "/accounts/expenses", icon: Wallet, label: "Expenses" },
+      { to: "/accounts/production-cost", icon: Wallet, label: "Production Cost" },
+      { to: "/accounts/receivables", icon: Wallet, label: "Receivables" },
+    ],
+  },
+  {
+    label: "REPORTS & ADMIN",
+    items: [
+      { to: "/reports", icon: FileBarChart, label: "Reports" },
+      { to: "/admin", icon: Settings, label: "Admin Panel" },
+    ],
   },
 ];
 
