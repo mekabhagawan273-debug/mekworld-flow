@@ -33,7 +33,7 @@ function PondReports() {
       <PageHeader title="Pond Reports" subtitle="This month summary across all ponds" />
       <Card className="overflow-auto"><table className="w-full text-sm">
         <thead className="bg-muted"><tr><th className="p-2 text-left">Pond</th><th className="p-2 text-right">Harvest (kg)</th><th className="p-2 text-right">Feed (kg)</th><th className="p-2 text-right">Mortality</th><th className="p-2 text-right">FCR</th></tr></thead>
-        <tbody>{rows.map((r, i) => <tr key={i} className="border-t"><td className="p-2"><span className="font-mono text-xs text-muted-foreground">{r.code}</span> {r.name}</td><td className="p-2 text-right">{r.harvest.toLocaleString()}</td><td className="p-2 text-right">{r.feed.toLocaleString()}</td><td className="p-2 text-right">{r.mort.toLocaleString()}</td><td className="p-2 text-right">{r.fcr}</td></tr>)}</tbody>
+        <tbody>{rows.map((r: any, i: number) => <tr key={i} className="border-t"><td className="p-2"><span className="font-mono text-xs text-muted-foreground">{r.code}</span> {r.name}</td><td className="p-2 text-right">{r.harvest.toLocaleString()}</td><td className="p-2 text-right">{r.feed.toLocaleString()}</td><td className="p-2 text-right">{r.mort.toLocaleString()}</td><td className="p-2 text-right">{r.fcr}</td></tr>)}</tbody>
       </table></Card>
     </div>
   );
