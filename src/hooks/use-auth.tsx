@@ -12,6 +12,7 @@ interface AuthCtx {
   roles: AppRole[];
   loading: boolean;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
@@ -53,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthCtx = {
     user, session, roles, loading,
     isAdmin: roles.includes("super_admin") || roles.includes("admin"),
+    isSuperAdmin: roles.includes("super_admin"),
     hasRole: (r) => roles.includes(r),
     signIn: async (email, password) => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });

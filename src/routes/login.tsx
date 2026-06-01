@@ -1,12 +1,14 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Anchor, Loader2 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
@@ -15,24 +17,50 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const { user, signIn, signUp, loading } = useAuth();
+  const { user, signIn, signUp, signOut, loading } = useAuth();
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [roles, setRoles] = useState<Array<{ role_name: string; role_display_name: string }>>([]);
 
   useEffect(() => {
     if (!loading && user) nav({ to: "/", replace: true });
   }, [user, loading, nav]);
 
+  useEffect(() => {
+    supabase.from("roles_master" as any)
+      .select("role_name, role_display_name")
+      .eq("is_active", true)
+      .order("role_display_name")
+      .then(({ data }) => setRoles((data as any) ?? []));
+  }, []);
+
   const onLogin = async (e: React.FormEvent) => {
-    e.preventDefault(); setBusy(true);
+    e.preventDefault();
+    if (!selectedRole) { toast.error("Please select your role"); return; }
+    setBusy(true);
     const { error } = await signIn(email, password);
+    if (error) { setBusy(false); toast.error(error); return; }
+    // Verify selected role matches an assigned role
+    const { data: sess } = await supabase.auth.getSession();
+    const uid = sess.session?.user.id;
+    if (uid) {
+      const { data: userRoles } = await supabase.from("user_roles").select("role").eq("user_id", uid);
+      const assigned = (userRoles ?? []).map((r: any) => r.role);
+      if (!assigned.includes(selectedRole)) {
+        await signOut();
+        setBusy(false);
+        toast.error("Selected role does not match your account. Please select the correct role.");
+        return;
+      }
+    }
     setBusy(false);
-    if (error) toast.error(error);
-    else toast.success("Welcome back");
+    toast.success("Welcome back");
   };
+
   const onSignup = async (e: React.FormEvent) => {
     e.preventDefault(); setBusy(true);
     const { error } = await signUp(email, password, fullName);
@@ -59,18 +87,6 @@ function LoginPage() {
           <p className="text-navy-foreground/70">
             End-to-end visibility from shrimp intake to global shipment — built for India's seafood exporters.
           </p>
-          <div className="grid grid-cols-3 gap-3 pt-4">
-            {[
-              ["Shrimp", "Processing"],
-              ["Cold Chain", "Inventory"],
-              ["Global", "Exports"],
-            ].map(([a, b]) => (
-              <div key={a} className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <div className="text-xs text-navy-foreground/60">{a}</div>
-                <div className="text-sm font-semibold">{b}</div>
-              </div>
-            ))}
-          </div>
         </div>
         <div className="relative text-xs text-navy-foreground/50">© {new Date().getFullYear()} MekWorld Marines Pvt. Ltd.</div>
       </div>
@@ -97,6 +113,18 @@ function LoginPage() {
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="role">Select Your Role</Label>
+                  <Select value={selectedRole} onValueChange={setSelectedRole}>
+                    <SelectTrigger id="role"><SelectValue placeholder="Choose your role…" /></SelectTrigger>
+                    <SelectContent>
+                      {roles.map((r) => (
+                        <SelectItem key={r.role_name} value={r.role_name}>{r.role_display_name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">Select the role assigned to you by your administrator</p>
                 </div>
                 <Button type="submit" disabled={busy} className="w-full bg-navy hover:bg-navy-hover text-navy-foreground">
                   {busy && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Sign in

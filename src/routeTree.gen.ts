@@ -36,10 +36,12 @@ import { Route as AppPondsIdRouteImport } from './routes/_app/ponds.$id'
 import { Route as AppPlantsIdRouteImport } from './routes/_app/plants.$id'
 import { Route as AppFloorBalanceHistoryRouteImport } from './routes/_app/floor-balance.history'
 import { Route as AppDashboardDeptRouteImport } from './routes/_app/dashboard.$dept'
+import { Route as AppAdminRolesRouteImport } from './routes/_app/admin.roles'
 import { Route as AppAccountsReceivablesRouteImport } from './routes/_app/accounts.receivables'
 import { Route as AppAccountsPurchasesRouteImport } from './routes/_app/accounts.purchases'
 import { Route as AppAccountsProductionCostRouteImport } from './routes/_app/accounts.production-cost'
 import { Route as AppAccountsExpensesRouteImport } from './routes/_app/accounts.expenses'
+import { Route as AppAdminRolesPermissionsRouteImport } from './routes/_app/admin.roles.permissions'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -176,6 +178,11 @@ const AppDashboardDeptRoute = AppDashboardDeptRouteImport.update({
   path: '/dashboard/$dept',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminRolesRoute = AppAdminRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 const AppAccountsReceivablesRoute = AppAccountsReceivablesRouteImport.update({
   id: '/accounts/receivables',
   path: '/accounts/receivables',
@@ -197,11 +204,17 @@ const AppAccountsExpensesRoute = AppAccountsExpensesRouteImport.update({
   path: '/accounts/expenses',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminRolesPermissionsRoute =
+  AppAdminRolesPermissionsRouteImport.update({
+    id: '/permissions',
+    path: '/permissions',
+    getParentRoute: () => AppAdminRolesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
-  '/admin': typeof AppAdminRoute
+  '/admin': typeof AppAdminRouteWithChildren
   '/analytics': typeof AppAnalyticsRoute
   '/floor-balance': typeof AppFloorBalanceRouteWithChildren
   '/hr': typeof AppHrRoute
@@ -216,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/accounts/production-cost': typeof AppAccountsProductionCostRoute
   '/accounts/purchases': typeof AppAccountsPurchasesRoute
   '/accounts/receivables': typeof AppAccountsReceivablesRoute
+  '/admin/roles': typeof AppAdminRolesRouteWithChildren
   '/dashboard/$dept': typeof AppDashboardDeptRoute
   '/floor-balance/history': typeof AppFloorBalanceHistoryRoute
   '/plants/$id': typeof AppPlantsIdRoute
@@ -229,10 +243,11 @@ export interface FileRoutesByFullPath {
   '/shrimp/qc': typeof AppShrimpQcRoute
   '/temperature-log/compliance': typeof AppTemperatureLogComplianceRoute
   '/temperature-log/ice': typeof AppTemperatureLogIceRoute
+  '/admin/roles/permissions': typeof AppAdminRolesPermissionsRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/admin': typeof AppAdminRoute
+  '/admin': typeof AppAdminRouteWithChildren
   '/analytics': typeof AppAnalyticsRoute
   '/floor-balance': typeof AppFloorBalanceRouteWithChildren
   '/hr': typeof AppHrRoute
@@ -248,6 +263,7 @@ export interface FileRoutesByTo {
   '/accounts/production-cost': typeof AppAccountsProductionCostRoute
   '/accounts/purchases': typeof AppAccountsPurchasesRoute
   '/accounts/receivables': typeof AppAccountsReceivablesRoute
+  '/admin/roles': typeof AppAdminRolesRouteWithChildren
   '/dashboard/$dept': typeof AppDashboardDeptRoute
   '/floor-balance/history': typeof AppFloorBalanceHistoryRoute
   '/plants/$id': typeof AppPlantsIdRoute
@@ -261,12 +277,13 @@ export interface FileRoutesByTo {
   '/shrimp/qc': typeof AppShrimpQcRoute
   '/temperature-log/compliance': typeof AppTemperatureLogComplianceRoute
   '/temperature-log/ice': typeof AppTemperatureLogIceRoute
+  '/admin/roles/permissions': typeof AppAdminRolesPermissionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
-  '/_app/admin': typeof AppAdminRoute
+  '/_app/admin': typeof AppAdminRouteWithChildren
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/floor-balance': typeof AppFloorBalanceRouteWithChildren
   '/_app/hr': typeof AppHrRoute
@@ -282,6 +299,7 @@ export interface FileRoutesById {
   '/_app/accounts/production-cost': typeof AppAccountsProductionCostRoute
   '/_app/accounts/purchases': typeof AppAccountsPurchasesRoute
   '/_app/accounts/receivables': typeof AppAccountsReceivablesRoute
+  '/_app/admin/roles': typeof AppAdminRolesRouteWithChildren
   '/_app/dashboard/$dept': typeof AppDashboardDeptRoute
   '/_app/floor-balance/history': typeof AppFloorBalanceHistoryRoute
   '/_app/plants/$id': typeof AppPlantsIdRoute
@@ -295,6 +313,7 @@ export interface FileRoutesById {
   '/_app/shrimp/qc': typeof AppShrimpQcRoute
   '/_app/temperature-log/compliance': typeof AppTemperatureLogComplianceRoute
   '/_app/temperature-log/ice': typeof AppTemperatureLogIceRoute
+  '/_app/admin/roles/permissions': typeof AppAdminRolesPermissionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -316,6 +335,7 @@ export interface FileRouteTypes {
     | '/accounts/production-cost'
     | '/accounts/purchases'
     | '/accounts/receivables'
+    | '/admin/roles'
     | '/dashboard/$dept'
     | '/floor-balance/history'
     | '/plants/$id'
@@ -329,6 +349,7 @@ export interface FileRouteTypes {
     | '/shrimp/qc'
     | '/temperature-log/compliance'
     | '/temperature-log/ice'
+    | '/admin/roles/permissions'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -348,6 +369,7 @@ export interface FileRouteTypes {
     | '/accounts/production-cost'
     | '/accounts/purchases'
     | '/accounts/receivables'
+    | '/admin/roles'
     | '/dashboard/$dept'
     | '/floor-balance/history'
     | '/plants/$id'
@@ -361,6 +383,7 @@ export interface FileRouteTypes {
     | '/shrimp/qc'
     | '/temperature-log/compliance'
     | '/temperature-log/ice'
+    | '/admin/roles/permissions'
   id:
     | '__root__'
     | '/_app'
@@ -381,6 +404,7 @@ export interface FileRouteTypes {
     | '/_app/accounts/production-cost'
     | '/_app/accounts/purchases'
     | '/_app/accounts/receivables'
+    | '/_app/admin/roles'
     | '/_app/dashboard/$dept'
     | '/_app/floor-balance/history'
     | '/_app/plants/$id'
@@ -394,6 +418,7 @@ export interface FileRouteTypes {
     | '/_app/shrimp/qc'
     | '/_app/temperature-log/compliance'
     | '/_app/temperature-log/ice'
+    | '/_app/admin/roles/permissions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -592,6 +617,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardDeptRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/roles': {
+      id: '/_app/admin/roles'
+      path: '/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AppAdminRolesRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
     '/_app/accounts/receivables': {
       id: '/_app/accounts/receivables'
       path: '/accounts/receivables'
@@ -620,8 +652,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAccountsExpensesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/roles/permissions': {
+      id: '/_app/admin/roles/permissions'
+      path: '/permissions'
+      fullPath: '/admin/roles/permissions'
+      preLoaderRoute: typeof AppAdminRolesPermissionsRouteImport
+      parentRoute: typeof AppAdminRolesRoute
+    }
   }
 }
+
+interface AppAdminRolesRouteChildren {
+  AppAdminRolesPermissionsRoute: typeof AppAdminRolesPermissionsRoute
+}
+
+const AppAdminRolesRouteChildren: AppAdminRolesRouteChildren = {
+  AppAdminRolesPermissionsRoute: AppAdminRolesPermissionsRoute,
+}
+
+const AppAdminRolesRouteWithChildren = AppAdminRolesRoute._addFileChildren(
+  AppAdminRolesRouteChildren,
+)
+
+interface AppAdminRouteChildren {
+  AppAdminRolesRoute: typeof AppAdminRolesRouteWithChildren
+}
+
+const AppAdminRouteChildren: AppAdminRouteChildren = {
+  AppAdminRolesRoute: AppAdminRolesRouteWithChildren,
+}
+
+const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
+  AppAdminRouteChildren,
+)
 
 interface AppFloorBalanceRouteChildren {
   AppFloorBalanceHistoryRoute: typeof AppFloorBalanceHistoryRoute
@@ -675,7 +738,7 @@ const AppTemperatureLogRouteWithChildren =
   AppTemperatureLogRoute._addFileChildren(AppTemperatureLogRouteChildren)
 
 interface AppRouteChildren {
-  AppAdminRoute: typeof AppAdminRoute
+  AppAdminRoute: typeof AppAdminRouteWithChildren
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppFloorBalanceRoute: typeof AppFloorBalanceRouteWithChildren
   AppHrRoute: typeof AppHrRoute
@@ -701,7 +764,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppAdminRoute: AppAdminRoute,
+  AppAdminRoute: AppAdminRouteWithChildren,
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppFloorBalanceRoute: AppFloorBalanceRouteWithChildren,
   AppHrRoute: AppHrRoute,
