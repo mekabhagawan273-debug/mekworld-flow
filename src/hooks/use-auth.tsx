@@ -54,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthCtx = {
     user, session, roles, loading,
     isAdmin: roles.includes("super_admin") || roles.includes("admin"),
+    isSuperAdmin: roles.includes("super_admin"),
     hasRole: (r) => roles.includes(r),
     signIn: async (email, password) => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
