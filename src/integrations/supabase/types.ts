@@ -136,6 +136,42 @@ export type Database = {
         }
         Relationships: []
       }
+      edit_audit_log: {
+        Row: {
+          edited_at: string
+          edited_by: string | null
+          edited_by_name: string | null
+          field_changed: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          record_id: string | null
+          table_name: string
+        }
+        Insert: {
+          edited_at?: string
+          edited_by?: string | null
+          edited_by_name?: string | null
+          field_changed: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          record_id?: string | null
+          table_name: string
+        }
+        Update: {
+          edited_at?: string
+          edited_by?: string | null
+          edited_by_name?: string | null
+          field_changed?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          record_id?: string | null
+          table_name?: string
+        }
+        Relationships: []
+      }
       employees: {
         Row: {
           created_at: string
@@ -1132,6 +1168,33 @@ export type Database = {
           invoice_value_usd?: number | null
           shipment_id?: string | null
           status?: string
+        }
+        Relationships: []
+      }
+      roles_master: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          is_built_in: boolean
+          role_display_name: string
+          role_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_built_in?: boolean
+          role_display_name: string
+          role_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_built_in?: boolean
+          role_display_name?: string
+          role_name?: string
         }
         Relationships: []
       }
