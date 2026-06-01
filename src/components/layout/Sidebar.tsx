@@ -66,9 +66,9 @@ const groups: Array<{
     items: [
       { to: "/reports", icon: FileBarChart, label: "Reports" },
       { to: "/admin", icon: Settings, label: "Admin Panel" },
+      { to: "/admin/roles", icon: ShieldCheck, label: "Role Management" },
     ],
   },
-];
 
 export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
