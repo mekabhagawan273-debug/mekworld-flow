@@ -69,6 +69,8 @@ const groups: Array<{
       { to: "/admin/roles", icon: ShieldCheck, label: "Role Management" },
     ],
   },
+];
+
 
 export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
