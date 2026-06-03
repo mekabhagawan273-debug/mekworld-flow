@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RecoverAdminRouteImport } from './routes/recover-admin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
@@ -23,6 +24,7 @@ import { Route as AppHrRouteImport } from './routes/_app/hr'
 import { Route as AppFloorBalanceRouteImport } from './routes/_app/floor-balance'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
+import { Route as ApiPublicRecoverSuperAdminRouteImport } from './routes/api/public/recover-super-admin'
 import { Route as AppTemperatureLogIceRouteImport } from './routes/_app/temperature-log.ice'
 import { Route as AppTemperatureLogComplianceRouteImport } from './routes/_app/temperature-log.compliance'
 import { Route as AppShrimpQcRouteImport } from './routes/_app/shrimp.qc'
@@ -43,6 +45,11 @@ import { Route as AppAccountsProductionCostRouteImport } from './routes/_app/acc
 import { Route as AppAccountsExpensesRouteImport } from './routes/_app/accounts.expenses'
 import { Route as AppAdminRolesPermissionsRouteImport } from './routes/_app/admin.roles.permissions'
 
+const RecoverAdminRoute = RecoverAdminRouteImport.update({
+  id: '/recover-admin',
+  path: '/recover-admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -112,6 +119,12 @@ const AppAdminRoute = AppAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiPublicRecoverSuperAdminRoute =
+  ApiPublicRecoverSuperAdminRouteImport.update({
+    id: '/api/public/recover-super-admin',
+    path: '/api/public/recover-super-admin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AppTemperatureLogIceRoute = AppTemperatureLogIceRouteImport.update({
   id: '/ice',
   path: '/ice',
@@ -214,6 +227,7 @@ const AppAdminRolesPermissionsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
+  '/recover-admin': typeof RecoverAdminRoute
   '/admin': typeof AppAdminRouteWithChildren
   '/analytics': typeof AppAnalyticsRoute
   '/floor-balance': typeof AppFloorBalanceRouteWithChildren
@@ -243,10 +257,12 @@ export interface FileRoutesByFullPath {
   '/shrimp/qc': typeof AppShrimpQcRoute
   '/temperature-log/compliance': typeof AppTemperatureLogComplianceRoute
   '/temperature-log/ice': typeof AppTemperatureLogIceRoute
+  '/api/public/recover-super-admin': typeof ApiPublicRecoverSuperAdminRoute
   '/admin/roles/permissions': typeof AppAdminRolesPermissionsRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/recover-admin': typeof RecoverAdminRoute
   '/admin': typeof AppAdminRouteWithChildren
   '/analytics': typeof AppAnalyticsRoute
   '/floor-balance': typeof AppFloorBalanceRouteWithChildren
@@ -277,12 +293,14 @@ export interface FileRoutesByTo {
   '/shrimp/qc': typeof AppShrimpQcRoute
   '/temperature-log/compliance': typeof AppTemperatureLogComplianceRoute
   '/temperature-log/ice': typeof AppTemperatureLogIceRoute
+  '/api/public/recover-super-admin': typeof ApiPublicRecoverSuperAdminRoute
   '/admin/roles/permissions': typeof AppAdminRolesPermissionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/recover-admin': typeof RecoverAdminRoute
   '/_app/admin': typeof AppAdminRouteWithChildren
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/floor-balance': typeof AppFloorBalanceRouteWithChildren
@@ -313,6 +331,7 @@ export interface FileRoutesById {
   '/_app/shrimp/qc': typeof AppShrimpQcRoute
   '/_app/temperature-log/compliance': typeof AppTemperatureLogComplianceRoute
   '/_app/temperature-log/ice': typeof AppTemperatureLogIceRoute
+  '/api/public/recover-super-admin': typeof ApiPublicRecoverSuperAdminRoute
   '/_app/admin/roles/permissions': typeof AppAdminRolesPermissionsRoute
 }
 export interface FileRouteTypes {
@@ -320,6 +339,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/recover-admin'
     | '/admin'
     | '/analytics'
     | '/floor-balance'
@@ -349,10 +369,12 @@ export interface FileRouteTypes {
     | '/shrimp/qc'
     | '/temperature-log/compliance'
     | '/temperature-log/ice'
+    | '/api/public/recover-super-admin'
     | '/admin/roles/permissions'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | '/recover-admin'
     | '/admin'
     | '/analytics'
     | '/floor-balance'
@@ -383,11 +405,13 @@ export interface FileRouteTypes {
     | '/shrimp/qc'
     | '/temperature-log/compliance'
     | '/temperature-log/ice'
+    | '/api/public/recover-super-admin'
     | '/admin/roles/permissions'
   id:
     | '__root__'
     | '/_app'
     | '/login'
+    | '/recover-admin'
     | '/_app/admin'
     | '/_app/analytics'
     | '/_app/floor-balance'
@@ -418,16 +442,26 @@ export interface FileRouteTypes {
     | '/_app/shrimp/qc'
     | '/_app/temperature-log/compliance'
     | '/_app/temperature-log/ice'
+    | '/api/public/recover-super-admin'
     | '/_app/admin/roles/permissions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
+  RecoverAdminRoute: typeof RecoverAdminRoute
+  ApiPublicRecoverSuperAdminRoute: typeof ApiPublicRecoverSuperAdminRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/recover-admin': {
+      id: '/recover-admin'
+      path: '/recover-admin'
+      fullPath: '/recover-admin'
+      preLoaderRoute: typeof RecoverAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -525,6 +559,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/api/public/recover-super-admin': {
+      id: '/api/public/recover-super-admin'
+      path: '/api/public/recover-super-admin'
+      fullPath: '/api/public/recover-super-admin'
+      preLoaderRoute: typeof ApiPublicRecoverSuperAdminRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/temperature-log/ice': {
       id: '/_app/temperature-log/ice'
@@ -794,6 +835,8 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
+  RecoverAdminRoute: RecoverAdminRoute,
+  ApiPublicRecoverSuperAdminRoute: ApiPublicRecoverSuperAdminRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
