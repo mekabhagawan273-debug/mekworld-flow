@@ -224,6 +224,15 @@ function ShrimpIntake() {
       </div>
 
       <DataTable data={data} columns={columns} searchKeys={["lot_number", "supplier_name", "species"]} loading={isLoading} />
+
+      <SuperAdminEditDialog
+        table="shrimp_intake"
+        record={editRow}
+        fields={editFields}
+        invalidateKeys={[["shrimp_intake"]]}
+        open={!!editRow}
+        onOpenChange={(v) => !v && setEditRow(null)}
+      />
     </div>
   );
 }
