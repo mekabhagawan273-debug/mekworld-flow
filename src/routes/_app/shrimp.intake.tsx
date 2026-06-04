@@ -12,10 +12,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, type Column } from "@/components/DataTable";
-import { Plus, Fish, Loader2, Download } from "lucide-react";
+import { Plus, Fish, Loader2, Download, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import * as XLSX from "xlsx";
+import { useAuth } from "@/hooks/use-auth";
+import { SuperAdminEditDialog, type EditField } from "@/components/SuperAdminEditDialog";
 
 export const Route = createFileRoute("/_app/shrimp/intake")({
   head: () => ({ meta: [{ title: "Shrimp Intake · MekWorld Marines ERP" }] }),
