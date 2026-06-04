@@ -26,6 +26,7 @@ type Intake = {
   id: string; lot_number: string; intake_date: string; supplier_name: string;
   vehicle_number: string | null; species: string; quantity_kg: number;
   price_per_kg: number; total_cost: number; quality_grade: string | null;
+  count_per_kg: number | null;
   moisture_pct: number | null; temperature_c: number | null; remarks: string | null;
 };
 
@@ -66,6 +67,7 @@ function ShrimpIntake() {
       quantity_kg: Number(fd.get("quantity_kg")),
       price_per_kg: Number(fd.get("price_per_kg") || 0),
       quality_grade: fd.get("quality_grade") || null,
+      count_per_kg: fd.get("count_per_kg") ? Number(fd.get("count_per_kg")) : null,
       moisture_pct: fd.get("moisture_pct") ? Number(fd.get("moisture_pct")) : null,
       temperature_c: fd.get("temperature_c") ? Number(fd.get("temperature_c")) : null,
       remarks: fd.get("remarks") || null,
@@ -86,6 +88,12 @@ function ShrimpIntake() {
     { key: "supplier_name", header: "Supplier" },
     { key: "species", header: "Species", render: (r) => <Badge variant="secondary">{r.species}</Badge> },
     { key: "quantity_kg", header: "Qty (kg)", render: (r) => Number(r.quantity_kg).toLocaleString() },
+    {
+      key: "count_per_kg", header: "Count/kg",
+      render: (r) => r.count_per_kg != null
+        ? <Badge variant="outline" className="font-mono">{r.count_per_kg}</Badge>
+        : <span className="text-muted-foreground">—</span>,
+    },
     { key: "price_per_kg", header: "₹/kg", render: (r) => `₹${Number(r.price_per_kg).toFixed(2)}` },
     { key: "total_cost", header: "Total", render: (r) => `₹${Number(r.total_cost).toLocaleString()}` },
     {
@@ -145,6 +153,7 @@ function ShrimpIntake() {
                     </Select>
                   </div>
                   <Field name="quantity_kg" label="Quantity (kg)" type="number" step="0.01" required />
+                  <Field name="count_per_kg" label="Count / kg (pieces)" type="number" step="1" />
                   <Field name="price_per_kg" label="Price per kg (₹)" type="number" step="0.01" />
                   <Field name="moisture_pct" label="Moisture %" type="number" step="0.01" />
                   <Field name="temperature_c" label="Temperature °C" type="number" step="0.1" />
