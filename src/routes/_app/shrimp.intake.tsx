@@ -67,6 +67,7 @@ function ShrimpIntake() {
       quantity_kg: Number(fd.get("quantity_kg")),
       price_per_kg: Number(fd.get("price_per_kg") || 0),
       quality_grade: fd.get("quality_grade") || null,
+      count_per_kg: fd.get("count_per_kg") ? Number(fd.get("count_per_kg")) : null,
       moisture_pct: fd.get("moisture_pct") ? Number(fd.get("moisture_pct")) : null,
       temperature_c: fd.get("temperature_c") ? Number(fd.get("temperature_c")) : null,
       remarks: fd.get("remarks") || null,
