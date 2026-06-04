@@ -26,6 +26,7 @@ type Intake = {
   id: string; lot_number: string; intake_date: string; supplier_name: string;
   vehicle_number: string | null; species: string; quantity_kg: number;
   price_per_kg: number; total_cost: number; quality_grade: string | null;
+  count_per_kg: number | null;
   moisture_pct: number | null; temperature_c: number | null; remarks: string | null;
 };
 
