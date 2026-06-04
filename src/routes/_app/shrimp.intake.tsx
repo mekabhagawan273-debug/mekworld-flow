@@ -88,6 +88,12 @@ function ShrimpIntake() {
     { key: "supplier_name", header: "Supplier" },
     { key: "species", header: "Species", render: (r) => <Badge variant="secondary">{r.species}</Badge> },
     { key: "quantity_kg", header: "Qty (kg)", render: (r) => Number(r.quantity_kg).toLocaleString() },
+    {
+      key: "count_per_kg", header: "Count/kg",
+      render: (r) => r.count_per_kg != null
+        ? <Badge variant="outline" className="font-mono">{r.count_per_kg}</Badge>
+        : <span className="text-muted-foreground">—</span>,
+    },
     { key: "price_per_kg", header: "₹/kg", render: (r) => `₹${Number(r.price_per_kg).toFixed(2)}` },
     { key: "total_cost", header: "Total", render: (r) => `₹${Number(r.total_cost).toLocaleString()}` },
     {
