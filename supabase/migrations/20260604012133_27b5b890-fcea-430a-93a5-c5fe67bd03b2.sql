@@ -1,0 +1,1 @@
+ALTER TABLE public.shrimp_intake ADD COLUMN count_per_kg integer;

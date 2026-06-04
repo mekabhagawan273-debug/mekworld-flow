@@ -1313,6 +1313,7 @@ export type Database = {
       }
       shrimp_intake: {
         Row: {
+          count_per_kg: number | null
           created_at: string
           created_by: string | null
           id: string
@@ -1331,6 +1332,7 @@ export type Database = {
           vehicle_number: string | null
         }
         Insert: {
+          count_per_kg?: number | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -1349,6 +1351,7 @@ export type Database = {
           vehicle_number?: string | null
         }
         Update: {
+          count_per_kg?: number | null
           created_at?: string
           created_by?: string | null
           id?: string
