@@ -34,7 +34,9 @@ type Intake = {
 
 function ShrimpIntake() {
   const qc = useQueryClient();
+  const { isSuperAdmin } = useAuth();
   const [open, setOpen] = useState(false);
+  const [editRow, setEditRow] = useState<Intake | null>(null);
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["shrimp_intake"],
