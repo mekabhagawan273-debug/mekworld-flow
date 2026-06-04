@@ -110,6 +110,35 @@ function ShrimpIntake() {
       ) : <span className="text-muted-foreground">—</span>,
     },
     { key: "temperature_c", header: "Temp °C", render: (r) => r.temperature_c ?? "—" },
+    ...(isSuperAdmin ? [{
+      key: "_edit", header: "", render: (r: Intake) => (
+        <Button size="sm" variant="ghost" onClick={() => setEditRow(r)}>
+          <Pencil className="w-3.5 h-3.5" />
+        </Button>
+      ),
+    }] : []),
+  ];
+
+  const editFields: EditField[] = [
+    { name: "lot_number", label: "Lot #" },
+    { name: "intake_date", label: "Intake date", type: "date" },
+    { name: "supplier_name", label: "Supplier" },
+    { name: "vehicle_number", label: "Vehicle #" },
+    { name: "species", label: "Species", type: "select", options: [
+      { value: "Vannamei", label: "Vannamei" },
+      { value: "Tiger", label: "Tiger" },
+      { value: "Black Tiger", label: "Black Tiger" },
+    ]},
+    { name: "quality_grade", label: "Grade", type: "select", options: [
+      { value: "A", label: "A" }, { value: "B", label: "B" }, { value: "C", label: "C" },
+    ]},
+    { name: "quantity_kg", label: "Quantity (kg)", type: "number", step: "0.01" },
+    { name: "count_per_kg", label: "Count / kg", type: "number", step: "1" },
+    { name: "price_per_kg", label: "Price / kg (₹)", type: "number", step: "0.01" },
+    { name: "total_cost", label: "Total cost (₹)", type: "number", step: "0.01" },
+    { name: "moisture_pct", label: "Moisture %", type: "number", step: "0.01" },
+    { name: "temperature_c", label: "Temperature °C", type: "number", step: "0.1" },
+    { name: "remarks", label: "Remarks", type: "textarea" },
   ];
 
   const totalKg = data.reduce((a, r) => a + Number(r.quantity_kg), 0);
