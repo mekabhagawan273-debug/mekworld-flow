@@ -12,10 +12,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, type Column } from "@/components/DataTable";
-import { Plus, Fish, Loader2, Download } from "lucide-react";
+import { Plus, Fish, Loader2, Download, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import * as XLSX from "xlsx";
+import { useAuth } from "@/hooks/use-auth";
+import { SuperAdminEditDialog, type EditField } from "@/components/SuperAdminEditDialog";
 
 export const Route = createFileRoute("/_app/shrimp/intake")({
   head: () => ({ meta: [{ title: "Shrimp Intake · MekWorld Marines ERP" }] }),
@@ -32,7 +34,9 @@ type Intake = {
 
 function ShrimpIntake() {
   const qc = useQueryClient();
+  const { isSuperAdmin } = useAuth();
   const [open, setOpen] = useState(false);
+  const [editRow, setEditRow] = useState<Intake | null>(null);
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["shrimp_intake"],
@@ -106,6 +110,35 @@ function ShrimpIntake() {
       ) : <span className="text-muted-foreground">—</span>,
     },
     { key: "temperature_c", header: "Temp °C", render: (r) => r.temperature_c ?? "—" },
+    ...(isSuperAdmin ? [{
+      key: "_edit", header: "", render: (r: Intake) => (
+        <Button size="sm" variant="ghost" onClick={() => setEditRow(r)}>
+          <Pencil className="w-3.5 h-3.5" />
+        </Button>
+      ),
+    }] : []),
+  ];
+
+  const editFields: EditField[] = [
+    { name: "lot_number", label: "Lot #" },
+    { name: "intake_date", label: "Intake date", type: "date" },
+    { name: "supplier_name", label: "Supplier" },
+    { name: "vehicle_number", label: "Vehicle #" },
+    { name: "species", label: "Species", type: "select", options: [
+      { value: "Vannamei", label: "Vannamei" },
+      { value: "Tiger", label: "Tiger" },
+      { value: "Black Tiger", label: "Black Tiger" },
+    ]},
+    { name: "quality_grade", label: "Grade", type: "select", options: [
+      { value: "A", label: "A" }, { value: "B", label: "B" }, { value: "C", label: "C" },
+    ]},
+    { name: "quantity_kg", label: "Quantity (kg)", type: "number", step: "0.01" },
+    { name: "count_per_kg", label: "Count / kg", type: "number", step: "1" },
+    { name: "price_per_kg", label: "Price / kg (₹)", type: "number", step: "0.01" },
+    { name: "total_cost", label: "Total cost (₹)", type: "number", step: "0.01" },
+    { name: "moisture_pct", label: "Moisture %", type: "number", step: "0.01" },
+    { name: "temperature_c", label: "Temperature °C", type: "number", step: "0.1" },
+    { name: "remarks", label: "Remarks", type: "textarea" },
   ];
 
   const totalKg = data.reduce((a, r) => a + Number(r.quantity_kg), 0);
@@ -191,6 +224,15 @@ function ShrimpIntake() {
       </div>
 
       <DataTable data={data} columns={columns} searchKeys={["lot_number", "supplier_name", "species"]} loading={isLoading} />
+
+      <SuperAdminEditDialog
+        table="shrimp_intake"
+        record={editRow}
+        fields={editFields}
+        invalidateKeys={[["shrimp_intake"]]}
+        open={!!editRow}
+        onOpenChange={(v) => !v && setEditRow(null)}
+      />
     </div>
   );
 }
