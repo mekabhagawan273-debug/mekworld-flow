@@ -153,6 +153,7 @@ function ShrimpIntake() {
                     </Select>
                   </div>
                   <Field name="quantity_kg" label="Quantity (kg)" type="number" step="0.01" required />
+                  <Field name="count_per_kg" label="Count / kg (pieces)" type="number" step="1" />
                   <Field name="price_per_kg" label="Price per kg (₹)" type="number" step="0.01" />
                   <Field name="moisture_pct" label="Moisture %" type="number" step="0.01" />
                   <Field name="temperature_c" label="Temperature °C" type="number" step="0.1" />
