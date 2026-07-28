@@ -9,45 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RecoverAdminRouteImport } from './routes/recover-admin'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as RecoverAdminRouteImport } from './routes/recover-admin'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as AppTemperatureLogRouteImport } from './routes/_app/temperature-log'
-import { Route as AppStoreRouteImport } from './routes/_app/store'
-import { Route as AppShipmentsRouteImport } from './routes/_app/shipments'
-import { Route as AppScanDocumentRouteImport } from './routes/_app/scan-document'
-import { Route as AppReportsRouteImport } from './routes/_app/reports'
-import { Route as AppPondsRouteImport } from './routes/_app/ponds'
-import { Route as AppPlantsRouteImport } from './routes/_app/plants'
-import { Route as AppHrRouteImport } from './routes/_app/hr'
-import { Route as AppFloorBalanceRouteImport } from './routes/_app/floor-balance'
-import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
-import { Route as ApiPublicRecoverSuperAdminRouteImport } from './routes/api/public/recover-super-admin'
-import { Route as AppTemperatureLogIceRouteImport } from './routes/_app/temperature-log.ice'
-import { Route as AppTemperatureLogComplianceRouteImport } from './routes/_app/temperature-log.compliance'
-import { Route as AppShrimpQcRouteImport } from './routes/_app/shrimp.qc'
-import { Route as AppShrimpIntakeRouteImport } from './routes/_app/shrimp.intake'
-import { Route as AppShrimpColdStorageRouteImport } from './routes/_app/shrimp.cold-storage'
-import { Route as AppShrimpBatchesRouteImport } from './routes/_app/shrimp.batches'
-import { Route as AppSecurityVisitorsRouteImport } from './routes/_app/security.visitors'
-import { Route as AppSecurityIncidentsRouteImport } from './routes/_app/security.incidents'
-import { Route as AppPondsReportsRouteImport } from './routes/_app/ponds.reports'
-import { Route as AppPondsIdRouteImport } from './routes/_app/ponds.$id'
-import { Route as AppPlantsIdRouteImport } from './routes/_app/plants.$id'
-import { Route as AppFloorBalanceHistoryRouteImport } from './routes/_app/floor-balance.history'
-import { Route as AppDashboardDeptRouteImport } from './routes/_app/dashboard.$dept'
-import { Route as AppAdminRolesRouteImport } from './routes/_app/admin.roles'
-import { Route as AppAccountsReceivablesRouteImport } from './routes/_app/accounts.receivables'
-import { Route as AppAccountsPurchasesRouteImport } from './routes/_app/accounts.purchases'
-import { Route as AppAccountsProductionCostRouteImport } from './routes/_app/accounts.production-cost'
+import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
+import { Route as AppFloorBalanceRouteImport } from './routes/_app/floor-balance'
+import { Route as AppHrRouteImport } from './routes/_app/hr'
+import { Route as AppPlantsRouteImport } from './routes/_app/plants'
+import { Route as AppPondsRouteImport } from './routes/_app/ponds'
+import { Route as AppReportsRouteImport } from './routes/_app/reports'
+import { Route as AppScanDocumentRouteImport } from './routes/_app/scan-document'
+import { Route as AppShipmentsRouteImport } from './routes/_app/shipments'
+import { Route as AppStoreRouteImport } from './routes/_app/store'
+import { Route as AppTemperatureLogRouteImport } from './routes/_app/temperature-log'
 import { Route as AppAccountsExpensesRouteImport } from './routes/_app/accounts.expenses'
+import { Route as AppAccountsProductionCostRouteImport } from './routes/_app/accounts.production-cost'
+import { Route as AppAccountsPurchasesRouteImport } from './routes/_app/accounts.purchases'
+import { Route as AppAccountsReceivablesRouteImport } from './routes/_app/accounts.receivables'
+import { Route as AppAdminRolesRouteImport } from './routes/_app/admin.roles'
+import { Route as AppDashboardDeptRouteImport } from './routes/_app/dashboard.$dept'
+import { Route as AppFloorBalanceHistoryRouteImport } from './routes/_app/floor-balance.history'
+import { Route as AppPlantsIdRouteImport } from './routes/_app/plants.$id'
+import { Route as AppPondsIdRouteImport } from './routes/_app/ponds.$id'
+import { Route as AppPondsReportsRouteImport } from './routes/_app/ponds.reports'
+import { Route as AppSecurityIncidentsRouteImport } from './routes/_app/security.incidents'
+import { Route as AppSecurityVisitorsRouteImport } from './routes/_app/security.visitors'
+import { Route as AppShrimpBatchesRouteImport } from './routes/_app/shrimp.batches'
+import { Route as AppShrimpColdStorageRouteImport } from './routes/_app/shrimp.cold-storage'
+import { Route as AppShrimpIntakeRouteImport } from './routes/_app/shrimp.intake'
+import { Route as AppShrimpQcRouteImport } from './routes/_app/shrimp.qc'
+import { Route as AppTemperatureLogComplianceRouteImport } from './routes/_app/temperature-log.compliance'
+import { Route as AppTemperatureLogIceRouteImport } from './routes/_app/temperature-log.ice'
+import { Route as ApiPublicRecoverSuperAdminRouteImport } from './routes/api/public/recover-super-admin'
 import { Route as AppAdminRolesPermissionsRouteImport } from './routes/_app/admin.roles.permissions'
 
-const RecoverAdminRoute = RecoverAdminRouteImport.update({
-  id: '/recover-admin',
-  path: '/recover-admin',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -55,8 +54,9 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppRoute = AppRouteImport.update({
-  id: '/_app',
+const RecoverAdminRoute = RecoverAdminRouteImport.update({
+  id: '/recover-admin',
+  path: '/recover-admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -64,49 +64,9 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppTemperatureLogRoute = AppTemperatureLogRouteImport.update({
-  id: '/temperature-log',
-  path: '/temperature-log',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppStoreRoute = AppStoreRouteImport.update({
-  id: '/store',
-  path: '/store',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppShipmentsRoute = AppShipmentsRouteImport.update({
-  id: '/shipments',
-  path: '/shipments',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppScanDocumentRoute = AppScanDocumentRouteImport.update({
-  id: '/scan-document',
-  path: '/scan-document',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppReportsRoute = AppReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPondsRoute = AppPondsRouteImport.update({
-  id: '/ponds',
-  path: '/ponds',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPlantsRoute = AppPlantsRouteImport.update({
-  id: '/plants',
-  path: '/plants',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppHrRoute = AppHrRouteImport.update({
-  id: '/hr',
-  path: '/hr',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFloorBalanceRoute = AppFloorBalanceRouteImport.update({
-  id: '/floor-balance',
-  path: '/floor-balance',
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
@@ -114,96 +74,54 @@ const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminRoute = AppAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const AppFloorBalanceRoute = AppFloorBalanceRouteImport.update({
+  id: '/floor-balance',
+  path: '/floor-balance',
   getParentRoute: () => AppRoute,
 } as any)
-const ApiPublicRecoverSuperAdminRoute =
-  ApiPublicRecoverSuperAdminRouteImport.update({
-    id: '/api/public/recover-super-admin',
-    path: '/api/public/recover-super-admin',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const AppTemperatureLogIceRoute = AppTemperatureLogIceRouteImport.update({
-  id: '/ice',
-  path: '/ice',
-  getParentRoute: () => AppTemperatureLogRoute,
-} as any)
-const AppTemperatureLogComplianceRoute =
-  AppTemperatureLogComplianceRouteImport.update({
-    id: '/compliance',
-    path: '/compliance',
-    getParentRoute: () => AppTemperatureLogRoute,
-  } as any)
-const AppShrimpQcRoute = AppShrimpQcRouteImport.update({
-  id: '/shrimp/qc',
-  path: '/shrimp/qc',
+const AppHrRoute = AppHrRouteImport.update({
+  id: '/hr',
+  path: '/hr',
   getParentRoute: () => AppRoute,
 } as any)
-const AppShrimpIntakeRoute = AppShrimpIntakeRouteImport.update({
-  id: '/shrimp/intake',
-  path: '/shrimp/intake',
+const AppPlantsRoute = AppPlantsRouteImport.update({
+  id: '/plants',
+  path: '/plants',
   getParentRoute: () => AppRoute,
 } as any)
-const AppShrimpColdStorageRoute = AppShrimpColdStorageRouteImport.update({
-  id: '/shrimp/cold-storage',
-  path: '/shrimp/cold-storage',
+const AppPondsRoute = AppPondsRouteImport.update({
+  id: '/ponds',
+  path: '/ponds',
   getParentRoute: () => AppRoute,
 } as any)
-const AppShrimpBatchesRoute = AppShrimpBatchesRouteImport.update({
-  id: '/shrimp/batches',
-  path: '/shrimp/batches',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSecurityVisitorsRoute = AppSecurityVisitorsRouteImport.update({
-  id: '/security/visitors',
-  path: '/security/visitors',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSecurityIncidentsRoute = AppSecurityIncidentsRouteImport.update({
-  id: '/security/incidents',
-  path: '/security/incidents',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPondsReportsRoute = AppPondsReportsRouteImport.update({
+const AppReportsRoute = AppReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
-  getParentRoute: () => AppPondsRoute,
-} as any)
-const AppPondsIdRoute = AppPondsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AppPondsRoute,
-} as any)
-const AppPlantsIdRoute = AppPlantsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AppPlantsRoute,
-} as any)
-const AppFloorBalanceHistoryRoute = AppFloorBalanceHistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
-  getParentRoute: () => AppFloorBalanceRoute,
-} as any)
-const AppDashboardDeptRoute = AppDashboardDeptRouteImport.update({
-  id: '/dashboard/$dept',
-  path: '/dashboard/$dept',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminRolesRoute = AppAdminRolesRouteImport.update({
-  id: '/roles',
-  path: '/roles',
-  getParentRoute: () => AppAdminRoute,
-} as any)
-const AppAccountsReceivablesRoute = AppAccountsReceivablesRouteImport.update({
-  id: '/accounts/receivables',
-  path: '/accounts/receivables',
+const AppScanDocumentRoute = AppScanDocumentRouteImport.update({
+  id: '/scan-document',
+  path: '/scan-document',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAccountsPurchasesRoute = AppAccountsPurchasesRouteImport.update({
-  id: '/accounts/purchases',
-  path: '/accounts/purchases',
+const AppShipmentsRoute = AppShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStoreRoute = AppStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTemperatureLogRoute = AppTemperatureLogRouteImport.update({
+  id: '/temperature-log',
+  path: '/temperature-log',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAccountsExpensesRoute = AppAccountsExpensesRouteImport.update({
+  id: '/accounts/expenses',
+  path: '/accounts/expenses',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAccountsProductionCostRoute =
@@ -212,11 +130,93 @@ const AppAccountsProductionCostRoute =
     path: '/accounts/production-cost',
     getParentRoute: () => AppRoute,
   } as any)
-const AppAccountsExpensesRoute = AppAccountsExpensesRouteImport.update({
-  id: '/accounts/expenses',
-  path: '/accounts/expenses',
+const AppAccountsPurchasesRoute = AppAccountsPurchasesRouteImport.update({
+  id: '/accounts/purchases',
+  path: '/accounts/purchases',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAccountsReceivablesRoute = AppAccountsReceivablesRouteImport.update({
+  id: '/accounts/receivables',
+  path: '/accounts/receivables',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminRolesRoute = AppAdminRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppDashboardDeptRoute = AppDashboardDeptRouteImport.update({
+  id: '/dashboard/$dept',
+  path: '/dashboard/$dept',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFloorBalanceHistoryRoute = AppFloorBalanceHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AppFloorBalanceRoute,
+} as any)
+const AppPlantsIdRoute = AppPlantsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppPlantsRoute,
+} as any)
+const AppPondsIdRoute = AppPondsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppPondsRoute,
+} as any)
+const AppPondsReportsRoute = AppPondsReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppPondsRoute,
+} as any)
+const AppSecurityIncidentsRoute = AppSecurityIncidentsRouteImport.update({
+  id: '/security/incidents',
+  path: '/security/incidents',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSecurityVisitorsRoute = AppSecurityVisitorsRouteImport.update({
+  id: '/security/visitors',
+  path: '/security/visitors',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpBatchesRoute = AppShrimpBatchesRouteImport.update({
+  id: '/shrimp/batches',
+  path: '/shrimp/batches',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpColdStorageRoute = AppShrimpColdStorageRouteImport.update({
+  id: '/shrimp/cold-storage',
+  path: '/shrimp/cold-storage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpIntakeRoute = AppShrimpIntakeRouteImport.update({
+  id: '/shrimp/intake',
+  path: '/shrimp/intake',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShrimpQcRoute = AppShrimpQcRouteImport.update({
+  id: '/shrimp/qc',
+  path: '/shrimp/qc',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTemperatureLogComplianceRoute =
+  AppTemperatureLogComplianceRouteImport.update({
+    id: '/compliance',
+    path: '/compliance',
+    getParentRoute: () => AppTemperatureLogRoute,
+  } as any)
+const AppTemperatureLogIceRoute = AppTemperatureLogIceRouteImport.update({
+  id: '/ice',
+  path: '/ice',
+  getParentRoute: () => AppTemperatureLogRoute,
+} as any)
+const ApiPublicRecoverSuperAdminRoute =
+  ApiPublicRecoverSuperAdminRouteImport.update({
+    id: '/api/public/recover-super-admin',
+    path: '/api/public/recover-super-admin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AppAdminRolesPermissionsRoute =
   AppAdminRolesPermissionsRouteImport.update({
     id: '/permissions',
@@ -455,11 +455,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/recover-admin': {
-      id: '/recover-admin'
-      path: '/recover-admin'
-      fullPath: '/recover-admin'
-      preLoaderRoute: typeof RecoverAdminRouteImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -469,11 +469,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app': {
-      id: '/_app'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AppRouteImport
+    '/recover-admin': {
+      id: '/recover-admin'
+      path: '/recover-admin'
+      fullPath: '/recover-admin'
+      preLoaderRoute: typeof RecoverAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/': {
@@ -483,67 +483,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/temperature-log': {
-      id: '/_app/temperature-log'
-      path: '/temperature-log'
-      fullPath: '/temperature-log'
-      preLoaderRoute: typeof AppTemperatureLogRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/store': {
-      id: '/_app/store'
-      path: '/store'
-      fullPath: '/store'
-      preLoaderRoute: typeof AppStoreRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/shipments': {
-      id: '/_app/shipments'
-      path: '/shipments'
-      fullPath: '/shipments'
-      preLoaderRoute: typeof AppShipmentsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/scan-document': {
-      id: '/_app/scan-document'
-      path: '/scan-document'
-      fullPath: '/scan-document'
-      preLoaderRoute: typeof AppScanDocumentRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/reports': {
-      id: '/_app/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof AppReportsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/ponds': {
-      id: '/_app/ponds'
-      path: '/ponds'
-      fullPath: '/ponds'
-      preLoaderRoute: typeof AppPondsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/plants': {
-      id: '/_app/plants'
-      path: '/plants'
-      fullPath: '/plants'
-      preLoaderRoute: typeof AppPlantsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/hr': {
-      id: '/_app/hr'
-      path: '/hr'
-      fullPath: '/hr'
-      preLoaderRoute: typeof AppHrRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/floor-balance': {
-      id: '/_app/floor-balance'
-      path: '/floor-balance'
-      fullPath: '/floor-balance'
-      preLoaderRoute: typeof AppFloorBalanceRouteImport
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/analytics': {
@@ -553,130 +497,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/admin': {
-      id: '/_app/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AppAdminRouteImport
+    '/_app/floor-balance': {
+      id: '/_app/floor-balance'
+      path: '/floor-balance'
+      fullPath: '/floor-balance'
+      preLoaderRoute: typeof AppFloorBalanceRouteImport
       parentRoute: typeof AppRoute
     }
-    '/api/public/recover-super-admin': {
-      id: '/api/public/recover-super-admin'
-      path: '/api/public/recover-super-admin'
-      fullPath: '/api/public/recover-super-admin'
-      preLoaderRoute: typeof ApiPublicRecoverSuperAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_app/temperature-log/ice': {
-      id: '/_app/temperature-log/ice'
-      path: '/ice'
-      fullPath: '/temperature-log/ice'
-      preLoaderRoute: typeof AppTemperatureLogIceRouteImport
-      parentRoute: typeof AppTemperatureLogRoute
-    }
-    '/_app/temperature-log/compliance': {
-      id: '/_app/temperature-log/compliance'
-      path: '/compliance'
-      fullPath: '/temperature-log/compliance'
-      preLoaderRoute: typeof AppTemperatureLogComplianceRouteImport
-      parentRoute: typeof AppTemperatureLogRoute
-    }
-    '/_app/shrimp/qc': {
-      id: '/_app/shrimp/qc'
-      path: '/shrimp/qc'
-      fullPath: '/shrimp/qc'
-      preLoaderRoute: typeof AppShrimpQcRouteImport
+    '/_app/hr': {
+      id: '/_app/hr'
+      path: '/hr'
+      fullPath: '/hr'
+      preLoaderRoute: typeof AppHrRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/shrimp/intake': {
-      id: '/_app/shrimp/intake'
-      path: '/shrimp/intake'
-      fullPath: '/shrimp/intake'
-      preLoaderRoute: typeof AppShrimpIntakeRouteImport
+    '/_app/plants': {
+      id: '/_app/plants'
+      path: '/plants'
+      fullPath: '/plants'
+      preLoaderRoute: typeof AppPlantsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/shrimp/cold-storage': {
-      id: '/_app/shrimp/cold-storage'
-      path: '/shrimp/cold-storage'
-      fullPath: '/shrimp/cold-storage'
-      preLoaderRoute: typeof AppShrimpColdStorageRouteImport
+    '/_app/ponds': {
+      id: '/_app/ponds'
+      path: '/ponds'
+      fullPath: '/ponds'
+      preLoaderRoute: typeof AppPondsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/shrimp/batches': {
-      id: '/_app/shrimp/batches'
-      path: '/shrimp/batches'
-      fullPath: '/shrimp/batches'
-      preLoaderRoute: typeof AppShrimpBatchesRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/security/visitors': {
-      id: '/_app/security/visitors'
-      path: '/security/visitors'
-      fullPath: '/security/visitors'
-      preLoaderRoute: typeof AppSecurityVisitorsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/security/incidents': {
-      id: '/_app/security/incidents'
-      path: '/security/incidents'
-      fullPath: '/security/incidents'
-      preLoaderRoute: typeof AppSecurityIncidentsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/ponds/reports': {
-      id: '/_app/ponds/reports'
+    '/_app/reports': {
+      id: '/_app/reports'
       path: '/reports'
-      fullPath: '/ponds/reports'
-      preLoaderRoute: typeof AppPondsReportsRouteImport
-      parentRoute: typeof AppPondsRoute
-    }
-    '/_app/ponds/$id': {
-      id: '/_app/ponds/$id'
-      path: '/$id'
-      fullPath: '/ponds/$id'
-      preLoaderRoute: typeof AppPondsIdRouteImport
-      parentRoute: typeof AppPondsRoute
-    }
-    '/_app/plants/$id': {
-      id: '/_app/plants/$id'
-      path: '/$id'
-      fullPath: '/plants/$id'
-      preLoaderRoute: typeof AppPlantsIdRouteImport
-      parentRoute: typeof AppPlantsRoute
-    }
-    '/_app/floor-balance/history': {
-      id: '/_app/floor-balance/history'
-      path: '/history'
-      fullPath: '/floor-balance/history'
-      preLoaderRoute: typeof AppFloorBalanceHistoryRouteImport
-      parentRoute: typeof AppFloorBalanceRoute
-    }
-    '/_app/dashboard/$dept': {
-      id: '/_app/dashboard/$dept'
-      path: '/dashboard/$dept'
-      fullPath: '/dashboard/$dept'
-      preLoaderRoute: typeof AppDashboardDeptRouteImport
+      fullPath: '/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/admin/roles': {
-      id: '/_app/admin/roles'
-      path: '/roles'
-      fullPath: '/admin/roles'
-      preLoaderRoute: typeof AppAdminRolesRouteImport
-      parentRoute: typeof AppAdminRoute
-    }
-    '/_app/accounts/receivables': {
-      id: '/_app/accounts/receivables'
-      path: '/accounts/receivables'
-      fullPath: '/accounts/receivables'
-      preLoaderRoute: typeof AppAccountsReceivablesRouteImport
+    '/_app/scan-document': {
+      id: '/_app/scan-document'
+      path: '/scan-document'
+      fullPath: '/scan-document'
+      preLoaderRoute: typeof AppScanDocumentRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/accounts/purchases': {
-      id: '/_app/accounts/purchases'
-      path: '/accounts/purchases'
-      fullPath: '/accounts/purchases'
-      preLoaderRoute: typeof AppAccountsPurchasesRouteImport
+    '/_app/shipments': {
+      id: '/_app/shipments'
+      path: '/shipments'
+      fullPath: '/shipments'
+      preLoaderRoute: typeof AppShipmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/store': {
+      id: '/_app/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof AppStoreRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/temperature-log': {
+      id: '/_app/temperature-log'
+      path: '/temperature-log'
+      fullPath: '/temperature-log'
+      preLoaderRoute: typeof AppTemperatureLogRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/accounts/expenses': {
+      id: '/_app/accounts/expenses'
+      path: '/accounts/expenses'
+      fullPath: '/accounts/expenses'
+      preLoaderRoute: typeof AppAccountsExpensesRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/accounts/production-cost': {
@@ -686,12 +574,124 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAccountsProductionCostRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/accounts/expenses': {
-      id: '/_app/accounts/expenses'
-      path: '/accounts/expenses'
-      fullPath: '/accounts/expenses'
-      preLoaderRoute: typeof AppAccountsExpensesRouteImport
+    '/_app/accounts/purchases': {
+      id: '/_app/accounts/purchases'
+      path: '/accounts/purchases'
+      fullPath: '/accounts/purchases'
+      preLoaderRoute: typeof AppAccountsPurchasesRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/accounts/receivables': {
+      id: '/_app/accounts/receivables'
+      path: '/accounts/receivables'
+      fullPath: '/accounts/receivables'
+      preLoaderRoute: typeof AppAccountsReceivablesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/roles': {
+      id: '/_app/admin/roles'
+      path: '/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AppAdminRolesRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/dashboard/$dept': {
+      id: '/_app/dashboard/$dept'
+      path: '/dashboard/$dept'
+      fullPath: '/dashboard/$dept'
+      preLoaderRoute: typeof AppDashboardDeptRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/floor-balance/history': {
+      id: '/_app/floor-balance/history'
+      path: '/history'
+      fullPath: '/floor-balance/history'
+      preLoaderRoute: typeof AppFloorBalanceHistoryRouteImport
+      parentRoute: typeof AppFloorBalanceRoute
+    }
+    '/_app/plants/$id': {
+      id: '/_app/plants/$id'
+      path: '/$id'
+      fullPath: '/plants/$id'
+      preLoaderRoute: typeof AppPlantsIdRouteImport
+      parentRoute: typeof AppPlantsRoute
+    }
+    '/_app/ponds/$id': {
+      id: '/_app/ponds/$id'
+      path: '/$id'
+      fullPath: '/ponds/$id'
+      preLoaderRoute: typeof AppPondsIdRouteImport
+      parentRoute: typeof AppPondsRoute
+    }
+    '/_app/ponds/reports': {
+      id: '/_app/ponds/reports'
+      path: '/reports'
+      fullPath: '/ponds/reports'
+      preLoaderRoute: typeof AppPondsReportsRouteImport
+      parentRoute: typeof AppPondsRoute
+    }
+    '/_app/security/incidents': {
+      id: '/_app/security/incidents'
+      path: '/security/incidents'
+      fullPath: '/security/incidents'
+      preLoaderRoute: typeof AppSecurityIncidentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/security/visitors': {
+      id: '/_app/security/visitors'
+      path: '/security/visitors'
+      fullPath: '/security/visitors'
+      preLoaderRoute: typeof AppSecurityVisitorsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/batches': {
+      id: '/_app/shrimp/batches'
+      path: '/shrimp/batches'
+      fullPath: '/shrimp/batches'
+      preLoaderRoute: typeof AppShrimpBatchesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/cold-storage': {
+      id: '/_app/shrimp/cold-storage'
+      path: '/shrimp/cold-storage'
+      fullPath: '/shrimp/cold-storage'
+      preLoaderRoute: typeof AppShrimpColdStorageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/intake': {
+      id: '/_app/shrimp/intake'
+      path: '/shrimp/intake'
+      fullPath: '/shrimp/intake'
+      preLoaderRoute: typeof AppShrimpIntakeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shrimp/qc': {
+      id: '/_app/shrimp/qc'
+      path: '/shrimp/qc'
+      fullPath: '/shrimp/qc'
+      preLoaderRoute: typeof AppShrimpQcRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/temperature-log/compliance': {
+      id: '/_app/temperature-log/compliance'
+      path: '/compliance'
+      fullPath: '/temperature-log/compliance'
+      preLoaderRoute: typeof AppTemperatureLogComplianceRouteImport
+      parentRoute: typeof AppTemperatureLogRoute
+    }
+    '/_app/temperature-log/ice': {
+      id: '/_app/temperature-log/ice'
+      path: '/ice'
+      fullPath: '/temperature-log/ice'
+      preLoaderRoute: typeof AppTemperatureLogIceRouteImport
+      parentRoute: typeof AppTemperatureLogRoute
+    }
+    '/api/public/recover-super-admin': {
+      id: '/api/public/recover-super-admin'
+      path: '/api/public/recover-super-admin'
+      fullPath: '/api/public/recover-super-admin'
+      preLoaderRoute: typeof ApiPublicRecoverSuperAdminRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/admin/roles/permissions': {
       id: '/_app/admin/roles/permissions'
