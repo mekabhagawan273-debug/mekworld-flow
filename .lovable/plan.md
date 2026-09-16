@@ -1,41 +1,36 @@
-## Super Admin Recovery Flow
+# Restrict data entry to a user's own department
 
-A safety net to regain Super Admin access without wiping data. Protected by a secret recovery key you store offline.
+## What happens today
 
-### 1. Add Cloud secret
-- `SUPER_ADMIN_RECOVERY_KEY` — long random string (I'll generate one and prompt you to save it via `add_secret`)
+Everyone signed in can view everything (fine) — but the database also lets **any** signed-in user *add* records to **any** module. Changing or deleting existing records is already limited to Super Admin.
 
-### 2. Public server route — `src/routes/api/public/recover-super-admin.ts`
-- `POST { email, recovery_key }`
-- Validates input with Zod (email format, key length 32–256)
-- Compares `recovery_key` against `process.env.SUPER_ADMIN_RECOVERY_KEY` using `crypto.timingSafeEqual` (constant-time, prevents timing leaks)
-- On match:
-  - Use `supabaseAdmin` to look up user in `auth.users` by email
-  - Insert `{ user_id, role: 'super_admin' }` into `user_roles` (idempotent — ignore unique-constraint conflict)
-  - Insert a row into `edit_audit_log` (`table_name='recovery'`, `field_changed='super_admin_granted'`, `new_value=email`, `edited_by_name='RECOVERY'`)
-- Responses: 200 success, 400 invalid input, 401 bad key, 404 unknown email, 500 server error
-- Generic error messages on bad key/email to avoid revealing which one was wrong
-- No rate limiting (per platform guidance — secret-key gate is the protection)
+So the real gap is: a Security Officer can add HR, Accounts or Pond records, and the "New …" buttons are visible on every screen to every role.
 
-### 3. Hidden recovery page — `src/routes/recover-admin.tsx`
-- Public route (NOT under `_app` or `_authenticated`) — not in sidebar
-- Reached by typing `/recover-admin` directly
-- Form: Email + Recovery Key (password input) + Submit
-- Calls the public route via `fetch('/api/public/recover-super-admin', …)`
-- Toast on success/error; "Go to login" link after success
-- Same `Card` + `Input` + `Button` design tokens as `/login`
-- `head()` with `noindex` meta to keep search engines out
+## What will change
 
-### 4. No database migration needed
-- Reuses existing `user_roles` and `edit_audit_log` tables
-- No new tables (rate-limit table dropped per platform guidance)
+Each role can only add/record data in its own modules. Everyone keeps full view access everywhere. Super Admin and Admin keep write access to everything. Editing and deleting existing records stays Super Admin only, as now.
 
-### What you do after build
-1. Approve the `add_secret` prompt for `SUPER_ADMIN_RECOVERY_KEY` (I'll suggest a strong value)
-2. Save the key in your password manager
-3. If locked out: open `/recover-admin`, enter your email + the key → role granted → log in normally
+Department map (same one already shown in the Permissions Matrix screen):
 
-### Files
-- create `src/routes/api/public/recover-super-admin.ts`
-- create `src/routes/recover-admin.tsx`
-- (secret added via tool)
+- Security Officer: Visitors, Incidents
+- Gate Guard: Visitors
+- Processing Supervisor: Batches, QC, Floor Balance, Shrimp Intake
+- QC Inspector: QC, Cold Storage, Temperature Log
+- Store Manager: Shrimp Intake, Store & Materials, Floor Balance, Scan Document
+- HR Manager: HR (employees, attendance)
+- Accounts Officer: Purchases, Expenses, Receivables, Production Cost, Shipments, Customers
+- Pond Supervisor: Ponds and all pond logs
+- Maintenance Technician: Plants, machines, breakdowns, plant logs
+- Canteen Staff: view only
+
+Two layers, so it holds even if someone bypasses the screen:
+
+1. **Screen level** — the "New …" / save buttons and entry forms are hidden for roles that don't own that module; a short "view only for your role" note appears instead.
+2. **Database level** — the add-record rules on each table are tightened to the owning roles, so a blocked write fails server-side too.
+
+## Technical notes
+
+- New security-definer function `public.can_write(_user_id uuid, _module text)` in the public schema, containing the role-to-module map; returns true for `super_admin` and `admin`. Granted to `authenticated` only.
+- Replace every `*_ins` policy's `WITH CHECK (auth.uid() IS NOT NULL)` with `public.can_write(auth.uid(), '<module>')` across all business tables (intake, batches, qc, cold storage, temperature, visitors, incidents, materials, stock movements, suppliers, floor balance, ponds + pond logs, plants + plant logs, employees, attendance, shipments, customers, purchases, expenses, receivables, production costs, ice log). `edit_audit_log` insert stays open so logging never breaks.
+- Client helper `src/lib/permissions.ts` exporting `useCanWrite(module)` built on `useAuth().roles`, mirroring the same map; used to gate create dialogs/buttons on each route. The existing `permsFor` in the Permissions Matrix page is refactored to read from this shared map so the matrix and reality can't drift.
+- Super Admin edit dialog is unchanged.
