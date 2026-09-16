@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -56,24 +57,26 @@ function ProductionCost() {
     <div>
       <PageHeader title="Production Cost" subtitle={`Cost per batch — alert when > ₹${THRESHOLD}/kg`}
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Cost</Button></DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle>Batch Cost</DialogTitle></DialogHeader>
-              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-3">
-                <div className="col-span-2 space-y-2"><Label>Batch</Label>
-                  <Select name="batch_id"><SelectTrigger><SelectValue placeholder="Select batch" /></SelectTrigger>
-                    <SelectContent>{batches.map((b: any) => <SelectItem key={b.id} value={b.id}>{b.batch_id}</SelectItem>)}</SelectContent>
-                  </Select>
-                </div>
-                <F n="material_cost" l="Material Cost (₹)" type="number" step="0.01" />
-                <F n="labour_cost" l="Labour Cost (₹)" type="number" step="0.01" />
-                <F n="overhead_cost" l="Overhead (₹)" type="number" step="0.01" />
-                <F n="output_kg" l="Output (kg)" type="number" step="0.01" />
-                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="accounts" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Cost</Button></DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Batch Cost</DialogTitle></DialogHeader>
+                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2 space-y-2"><Label>Batch</Label>
+                    <Select name="batch_id"><SelectTrigger><SelectValue placeholder="Select batch" /></SelectTrigger>
+                      <SelectContent>{batches.map((b: any) => <SelectItem key={b.id} value={b.id}>{b.batch_id}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <F n="material_cost" l="Material Cost (₹)" type="number" step="0.01" />
+                  <F n="labour_cost" l="Labour Cost (₹)" type="number" step="0.01" />
+                  <F n="overhead_cost" l="Overhead (₹)" type="number" step="0.01" />
+                  <F n="output_kg" l="Output (kg)" type="number" step="0.01" />
+                  <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={cols} loading={isLoading} />

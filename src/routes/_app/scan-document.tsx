@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -177,9 +178,11 @@ function ScanDoc() {
                   <SelectContent>{MODULES.map(m => <SelectItem key={m.v} value={m.v}>{m.l}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <Button onClick={save} disabled={saving} className="w-full bg-teal text-teal-foreground hover:bg-teal/90">
-                {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}Save to Module
-              </Button>
+              <WriteGate module="scan" note>
+                <Button onClick={save} disabled={saving} className="w-full bg-teal text-teal-foreground hover:bg-teal/90">
+                  {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}Save to Module
+                </Button>
+              </WriteGate>
             </div>
           )}
         </Card>

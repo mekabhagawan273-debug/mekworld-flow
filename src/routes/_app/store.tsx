@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -91,40 +92,42 @@ function MaterialsTab() {
         <Card className="p-4 flex items-start gap-3"><AlertTriangle className="w-5 h-5 text-warning mt-1" /><div><div className="text-xs uppercase text-muted-foreground">Low Stock Alert</div><div className="text-2xl font-bold mt-1">{lowStock}</div></div></Card>
       </div>
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Material</Button></DialogTrigger>
-          <DialogContent className="max-w-xl">
-            <DialogHeader><DialogTitle>New Material</DialogTitle></DialogHeader>
-            <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-              <F name="code" label="Code" required />
-              <F name="name" label="Name" required />
-              <div className="space-y-2"><Label>Category *</Label>
-                <Select name="category" defaultValue="RM" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="RM">Raw Material</SelectItem>
-                    <SelectItem value="GM">General Material</SelectItem>
-                    <SelectItem value="CM">Chemical Material</SelectItem>
-                    <SelectItem value="PM">Packing Material</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2"><Label>UOM *</Label>
-                <Select name="uom" defaultValue="kg" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{["kg","g","ltr","pcs","carton","box","bag"].map(u => <SelectItem key={u} value={u}>{u}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <F name="current_stock" label="Opening Stock" type="number" step="0.01" />
-              <F name="min_stock" label="Min Stock Level" type="number" step="0.01" />
-              <F name="unit_cost" label="Unit Cost (₹)" type="number" step="0.01" />
-              <DialogFooter className="col-span-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="store" note >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Material</Button></DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogHeader><DialogTitle>New Material</DialogTitle></DialogHeader>
+              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                <F name="code" label="Code" required />
+                <F name="name" label="Name" required />
+                <div className="space-y-2"><Label>Category *</Label>
+                  <Select name="category" defaultValue="RM" required>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="RM">Raw Material</SelectItem>
+                      <SelectItem value="GM">General Material</SelectItem>
+                      <SelectItem value="CM">Chemical Material</SelectItem>
+                      <SelectItem value="PM">Packing Material</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2"><Label>UOM *</Label>
+                  <Select name="uom" defaultValue="kg" required>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>{["kg","g","ltr","pcs","carton","box","bag"].map(u => <SelectItem key={u} value={u}>{u}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <F name="current_stock" label="Opening Stock" type="number" step="0.01" />
+                <F name="min_stock" label="Min Stock Level" type="number" step="0.01" />
+                <F name="unit_cost" label="Unit Cost (₹)" type="number" step="0.01" />
+                <DialogFooter className="col-span-2">
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <DataTable data={data} columns={columns} searchKeys={["code", "name", "category"]} loading={isLoading} />
     </div>
@@ -180,39 +183,41 @@ function MovementsTab() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Movement</Button></DialogTrigger>
-          <DialogContent className="max-w-xl">
-            <DialogHeader><DialogTitle>Stock Movement</DialogTitle></DialogHeader>
-            <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-              <div className="space-y-2 col-span-2"><Label>Material *</Label>
-                <Select name="material_id" required>
-                  <SelectTrigger><SelectValue placeholder="Select material" /></SelectTrigger>
-                  <SelectContent>{materials.map((m: any) => <SelectItem key={m.id} value={m.id}>{m.code} — {m.name}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2"><Label>Type *</Label>
-                <Select name="movement_type" defaultValue="in" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent><SelectItem value="in">Inward</SelectItem><SelectItem value="out">Outward</SelectItem></SelectContent>
-                </Select>
-              </div>
-              <F name="quantity" label="Quantity" type="number" step="0.01" required />
-              <F name="reference_no" label="Reference / GRN No" />
-              <div className="space-y-2"><Label>Supplier</Label>
-                <Select name="supplier_id">
-                  <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
-                  <SelectContent>{suppliers.map((s: any) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="col-span-2 space-y-2"><Label>Notes</Label><Textarea name="notes" rows={2} /></div>
-              <DialogFooter className="col-span-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="store" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Movement</Button></DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogHeader><DialogTitle>Stock Movement</DialogTitle></DialogHeader>
+              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                <div className="space-y-2 col-span-2"><Label>Material *</Label>
+                  <Select name="material_id" required>
+                    <SelectTrigger><SelectValue placeholder="Select material" /></SelectTrigger>
+                    <SelectContent>{materials.map((m: any) => <SelectItem key={m.id} value={m.id}>{m.code} — {m.name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2"><Label>Type *</Label>
+                  <Select name="movement_type" defaultValue="in" required>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="in">Inward</SelectItem><SelectItem value="out">Outward</SelectItem></SelectContent>
+                  </Select>
+                </div>
+                <F name="quantity" label="Quantity" type="number" step="0.01" required />
+                <F name="reference_no" label="Reference / GRN No" />
+                <div className="space-y-2"><Label>Supplier</Label>
+                  <Select name="supplier_id">
+                    <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                    <SelectContent>{suppliers.map((s: any) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2 space-y-2"><Label>Notes</Label><Textarea name="notes" rows={2} /></div>
+                <DialogFooter className="col-span-2">
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <DataTable data={data} columns={columns} searchKeys={["reference_no"]} loading={isLoading} />
     </div>
@@ -251,35 +256,37 @@ function SuppliersTab() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Supplier</Button></DialogTrigger>
-          <DialogContent className="max-w-xl">
-            <DialogHeader><DialogTitle>New Supplier</DialogTitle></DialogHeader>
-            <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-              <F name="name" label="Supplier Name" required />
-              <div className="space-y-2"><Label>Type *</Label>
-                <Select name="supplier_type" defaultValue="material" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="shrimp">Shrimp / Raw Material</SelectItem>
-                    <SelectItem value="material">General Material</SelectItem>
-                    <SelectItem value="packing">Packing</SelectItem>
-                    <SelectItem value="chemical">Chemical</SelectItem>
-                    <SelectItem value="service">Service</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <F name="contact_person" label="Contact Person" />
-              <F name="phone" label="Phone" />
-              <F name="email" label="Email" type="email" />
-              <div className="col-span-2 space-y-2"><Label>Address</Label><Textarea name="address" rows={2} /></div>
-              <DialogFooter className="col-span-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="store" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Supplier</Button></DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogHeader><DialogTitle>New Supplier</DialogTitle></DialogHeader>
+              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                <F name="name" label="Supplier Name" required />
+                <div className="space-y-2"><Label>Type *</Label>
+                  <Select name="supplier_type" defaultValue="material" required>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="shrimp">Shrimp / Raw Material</SelectItem>
+                      <SelectItem value="material">General Material</SelectItem>
+                      <SelectItem value="packing">Packing</SelectItem>
+                      <SelectItem value="chemical">Chemical</SelectItem>
+                      <SelectItem value="service">Service</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <F name="contact_person" label="Contact Person" />
+                <F name="phone" label="Phone" />
+                <F name="email" label="Email" type="email" />
+                <div className="col-span-2 space-y-2"><Label>Address</Label><Textarea name="address" rows={2} /></div>
+                <DialogFooter className="col-span-2">
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <DataTable data={data} columns={columns} searchKeys={["name", "contact_person", "email"]} loading={isLoading} />
     </div>

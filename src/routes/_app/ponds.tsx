@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -58,53 +59,55 @@ function PondsList() {
         actions={
           <div className="flex gap-2">
             <Button asChild variant="outline"><Link to="/ponds/reports"><FileBarChart className="w-4 h-4 mr-2" />Reports</Link></Button>
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Pond</Button></DialogTrigger>
-              <DialogContent>
-                <DialogHeader><DialogTitle>New Pond</DialogTitle></DialogHeader>
-                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-                  <Fld n="pond_code" l="Pond Code" required />
-                  <Fld n="name" l="Name" required />
-                  <Fld n="size_acres" l="Size (acres)" type="number" step="0.01" />
-                  <div className="space-y-2"><Label>Type *</Label>
-                    <Select name="pond_type" defaultValue="grow_out" required>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="grow_out">Grow-out</SelectItem>
-                        <SelectItem value="nursery">Nursery</SelectItem>
-                        <SelectItem value="brood">Brood</SelectItem>
-                        <SelectItem value="hatchery">Hatchery</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2"><Label>Status *</Label>
-                    <Select name="status" defaultValue="active" required>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="fallow">Fallow</SelectItem>
-                        <SelectItem value="harvesting">Harvesting</SelectItem>
-                        <SelectItem value="treatment">Under Treatment</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2"><Label>Species</Label>
-                    <Select name="species">
-                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Vannamei">Vannamei</SelectItem>
-                        <SelectItem value="Tiger">Tiger</SelectItem>
-                        <SelectItem value="Black Tiger">Black Tiger</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <DialogFooter className="col-span-2">
-                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                    <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <WriteGate module="ponds" note >
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Pond</Button></DialogTrigger>
+                <DialogContent>
+                  <DialogHeader><DialogTitle>New Pond</DialogTitle></DialogHeader>
+                  <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                    <Fld n="pond_code" l="Pond Code" required />
+                    <Fld n="name" l="Name" required />
+                    <Fld n="size_acres" l="Size (acres)" type="number" step="0.01" />
+                    <div className="space-y-2"><Label>Type *</Label>
+                      <Select name="pond_type" defaultValue="grow_out" required>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="grow_out">Grow-out</SelectItem>
+                          <SelectItem value="nursery">Nursery</SelectItem>
+                          <SelectItem value="brood">Brood</SelectItem>
+                          <SelectItem value="hatchery">Hatchery</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2"><Label>Status *</Label>
+                      <Select name="status" defaultValue="active" required>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="fallow">Fallow</SelectItem>
+                          <SelectItem value="harvesting">Harvesting</SelectItem>
+                          <SelectItem value="treatment">Under Treatment</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2"><Label>Species</Label>
+                      <Select name="species">
+                        <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Vannamei">Vannamei</SelectItem>
+                          <SelectItem value="Tiger">Tiger</SelectItem>
+                          <SelectItem value="Black Tiger">Black Tiger</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <DialogFooter className="col-span-2">
+                      <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                      <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </WriteGate>
           </div>
         }
       />

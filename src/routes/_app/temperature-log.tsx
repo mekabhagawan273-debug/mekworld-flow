@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -63,22 +64,24 @@ function TempLog() {
           <div className="flex gap-2">
             <Button asChild variant="outline"><Link to="/temperature-log/compliance">Compliance</Link></Button>
             <Button asChild variant="outline"><Link to="/temperature-log/ice"><Snowflake className="w-4 h-4 mr-2" />Ice Log</Link></Button>
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Reading</Button></DialogTrigger>
-              <DialogContent>
-                <DialogHeader><DialogTitle>Temperature Reading</DialogTitle></DialogHeader>
-                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-3">
-                  <div className="col-span-2 space-y-2"><Label>Location *</Label>
-                    <Select name="location_name" required>
-                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                      <SelectContent>{thresholds.map((t: any) => <SelectItem key={t.id} value={t.location_name}>{t.location_name} ({t.min_temp}°C to {t.max_temp}°C)</SelectItem>)}</SelectContent>
-                    </Select>
-                  </div>
-                  <div className="col-span-2 space-y-2"><Label>Temperature (°C) *</Label><Input name="temperature_c" type="number" step="0.1" required /></div>
-                  <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <WriteGate module="temperature" note >
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Reading</Button></DialogTrigger>
+                <DialogContent>
+                  <DialogHeader><DialogTitle>Temperature Reading</DialogTitle></DialogHeader>
+                  <form onSubmit={onSubmit} className="grid grid-cols-2 gap-3">
+                    <div className="col-span-2 space-y-2"><Label>Location *</Label>
+                      <Select name="location_name" required>
+                        <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectContent>{thresholds.map((t: any) => <SelectItem key={t.id} value={t.location_name}>{t.location_name} ({t.min_temp}°C to {t.max_temp}°C)</SelectItem>)}</SelectContent>
+                      </Select>
+                    </div>
+                    <div className="col-span-2 space-y-2"><Label>Temperature (°C) *</Label><Input name="temperature_c" type="number" step="0.1" required /></div>
+                    <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </WriteGate>
           </div>
         }
       />

@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -106,56 +107,58 @@ function Batches() {
         title="Processing Batches"
         subtitle="Track every production batch from start to finish"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-teal text-teal-foreground hover:bg-teal/90">
-                <Plus className="w-4 h-4 mr-2" />New Batch
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2"><ClipboardList className="w-5 h-5" />Create Processing Batch</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-                <div className="space-y-2 col-span-2">
-                  <Label>Source Intake Lot</Label>
-                  <Select name="intake_id">
-                    <SelectTrigger><SelectValue placeholder="Select lot..." /></SelectTrigger>
-                    <SelectContent>
-                      {intakes.map((i: any) => (
-                        <SelectItem key={i.id} value={i.id}>{i.lot_number} — {i.species}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Processing type *</Label>
-                  <Select name="processing_type" defaultValue="PD" required>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {PROC_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <FF name="workers_count" label="Workers" type="number" />
-                <FF name="machines_used" label="Machines used" />
-                <FF name="input_weight_kg" label="Input weight (kg)" type="number" step="0.01" />
-                <FF name="output_weight_kg" label="Output weight (kg)" type="number" step="0.01" />
-                <FF name="wastage_kg" label="Wastage (kg)" type="number" step="0.01" />
-                <FF name="byproduct_kg" label="By-product (kg)" type="number" step="0.01" />
-                <div className="col-span-2 space-y-2">
-                  <Label>Notes</Label>
-                  <Input name="notes" />
-                </div>
-                <DialogFooter className="col-span-2">
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                  <Button type="submit" disabled={create.isPending}>
-                    {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Create
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="batches" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-teal text-teal-foreground hover:bg-teal/90">
+                  <Plus className="w-4 h-4 mr-2" />New Batch
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2"><ClipboardList className="w-5 h-5" />Create Processing Batch</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2 col-span-2">
+                    <Label>Source Intake Lot</Label>
+                    <Select name="intake_id">
+                      <SelectTrigger><SelectValue placeholder="Select lot..." /></SelectTrigger>
+                      <SelectContent>
+                        {intakes.map((i: any) => (
+                          <SelectItem key={i.id} value={i.id}>{i.lot_number} — {i.species}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Processing type *</Label>
+                    <Select name="processing_type" defaultValue="PD" required>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {PROC_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <FF name="workers_count" label="Workers" type="number" />
+                  <FF name="machines_used" label="Machines used" />
+                  <FF name="input_weight_kg" label="Input weight (kg)" type="number" step="0.01" />
+                  <FF name="output_weight_kg" label="Output weight (kg)" type="number" step="0.01" />
+                  <FF name="wastage_kg" label="Wastage (kg)" type="number" step="0.01" />
+                  <FF name="byproduct_kg" label="By-product (kg)" type="number" step="0.01" />
+                  <div className="col-span-2 space-y-2">
+                    <Label>Notes</Label>
+                    <Input name="notes" />
+                  </div>
+                  <DialogFooter className="col-span-2">
+                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button type="submit" disabled={create.isPending}>
+                      {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Create
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={columns} searchKeys={["batch_id", "processing_type"]} loading={isLoading} />

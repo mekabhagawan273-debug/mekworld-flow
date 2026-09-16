@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { ShieldAlert, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { canWriteWithRoles, type WriteModule } from "@/lib/permissions";
 
 export const Route = createFileRoute("/_app/admin/roles/permissions")({
   head: () => ({ meta: [{ title: "Permissions Matrix · MekWorld Marines ERP" }] }),
@@ -19,30 +20,23 @@ const MODULES = [
   "Temperature Log","Purchases","Expenses","Receivables","Analytics","Admin Panel",
 ];
 
-// permission per role: ['c','v','e','d'] (super_admin), ['c','v'] (most), ['v'] (read-only)
+const MODULE_KEY: Record<string, WriteModule> = {
+  "Visitors": "visitors", "Incidents": "incidents", "RM Inward": "intake",
+  "Batches": "batches", "QC": "qc", "Cold Storage": "cold_storage",
+  "Ponds": "ponds", "Plants": "plants", "Shipments": "shipments", "HR": "hr",
+  "Floor Balance": "floor_balance", "Scan Document": "scan",
+  "Temperature Log": "temperature", "Purchases": "accounts",
+  "Expenses": "accounts", "Receivables": "accounts", "Analytics": "accounts",
+  "Admin Panel": "admin",
+};
+
+// permission per role: ['c','v','e','d'] (super_admin), ['c','v'], or ['v']
 function permsFor(role: string, mod: string): string[] {
-  if (role === "super_admin") return ["c","v","e","d"];
-  if (role === "admin") {
-    if (mod === "Admin Panel") return ["v"];
-    return ["c","v"];
-  }
-  if (mod === "Admin Panel") return [];
-  // department mapping (lenient: view + create on relevant modules, view-only elsewhere)
-  const map: Record<string, string[]> = {
-    security_officer: ["Visitors","Incidents"],
-    gate_guard: ["Visitors"],
-    processing_supervisor: ["Batches","QC","Floor Balance","RM Inward"],
-    qc_inspector: ["QC","Cold Storage","Temperature Log"],
-    store_manager: ["RM Inward","Floor Balance","Scan Document"],
-    hr_manager: ["HR"],
-    accounts_officer: ["Purchases","Expenses","Receivables","Shipments"],
-    pond_supervisor: ["Ponds"],
-    maintenance_technician: ["Plants"],
-    canteen_staff: [],
-  };
-  const allowed = map[role] ?? [];
-  if (allowed.includes(mod)) return ["c","v"];
-  return ["v"];
+  if (role === "super_admin") return ["c", "v", "e", "d"];
+  const key = MODULE_KEY[mod];
+  if (mod === "Analytics") return role === "admin" || role === "accounts_officer" ? ["v"] : ["v"];
+  if (mod === "Admin Panel") return role === "admin" ? ["v"] : [];
+  return canWriteWithRoles([role], key) ? ["c", "v"] : ["v"];
 }
 
 const BADGE: Record<string, string> = {

@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -32,19 +33,21 @@ function IceLog() {
       <Button asChild variant="ghost" size="sm" className="mb-3"><Link to="/temperature-log"><ArrowLeft className="w-4 h-4 mr-1" />Back</Link></Button>
       <PageHeader title="Ice Usage Log" subtitle="Daily ice production and consumption"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Entry</Button></DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle>Ice Entry</DialogTitle></DialogHeader>
-              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ log_date: fd.get("log_date"), ice_produced_kg: Number(fd.get("ice_produced_kg") || 0), ice_consumed_kg: Number(fd.get("ice_consumed_kg") || 0), recorded_by: fd.get("recorded_by") }); }} className="grid grid-cols-2 gap-3">
-                <div className="space-y-2"><Label>Date *</Label><Input name="log_date" type="date" required /></div>
-                <div className="space-y-2"><Label>Recorded By</Label><Input name="recorded_by" /></div>
-                <div className="space-y-2"><Label>Produced (kg)</Label><Input name="ice_produced_kg" type="number" step="0.01" /></div>
-                <div className="space-y-2"><Label>Consumed (kg)</Label><Input name="ice_consumed_kg" type="number" step="0.01" /></div>
-                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="temperature" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Entry</Button></DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Ice Entry</DialogTitle></DialogHeader>
+                <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ log_date: fd.get("log_date"), ice_produced_kg: Number(fd.get("ice_produced_kg") || 0), ice_consumed_kg: Number(fd.get("ice_consumed_kg") || 0), recorded_by: fd.get("recorded_by") }); }} className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2"><Label>Date *</Label><Input name="log_date" type="date" required /></div>
+                  <div className="space-y-2"><Label>Recorded By</Label><Input name="recorded_by" /></div>
+                  <div className="space-y-2"><Label>Produced (kg)</Label><Input name="ice_produced_kg" type="number" step="0.01" /></div>
+                  <div className="space-y-2"><Label>Consumed (kg)</Label><Input name="ice_consumed_kg" type="number" step="0.01" /></div>
+                  <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <Card className="p-5 mb-4 flex items-center gap-4"><Snowflake className="w-10 h-10 text-teal" />

@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -49,25 +50,27 @@ function Expenses() {
     <div>
       <PageHeader title="Expenses" subtitle="Daily operational expenses by category"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Expense</Button></DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle>New Expense</DialogTitle></DialogHeader>
-              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ expense_date: fd.get("expense_date"), category: String(fd.get("category")), description: fd.get("description"), amount: Number(fd.get("amount") || 0), paid_by: fd.get("paid_by") }); }} className="grid grid-cols-2 gap-3">
-                <F n="expense_date" l="Date" type="date" required />
-                <div className="space-y-2"><Label>Category *</Label>
-                  <Select name="category" defaultValue="Labour" required>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>{CATS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-                  </Select>
-                </div>
-                <div className="col-span-2"><F n="description" l="Description" /></div>
-                <F n="amount" l="Amount (₹)" type="number" step="0.01" required />
-                <F n="paid_by" l="Paid By" />
-                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="accounts" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Expense</Button></DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>New Expense</DialogTitle></DialogHeader>
+                <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ expense_date: fd.get("expense_date"), category: String(fd.get("category")), description: fd.get("description"), amount: Number(fd.get("amount") || 0), paid_by: fd.get("paid_by") }); }} className="grid grid-cols-2 gap-3">
+                  <F n="expense_date" l="Date" type="date" required />
+                  <div className="space-y-2"><Label>Category *</Label>
+                    <Select name="category" defaultValue="Labour" required>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>{CATS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <div className="col-span-2"><F n="description" l="Description" /></div>
+                  <F n="amount" l="Amount (₹)" type="number" step="0.01" required />
+                  <F n="paid_by" l="Paid By" />
+                  <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <div className="grid lg:grid-cols-3 gap-4 mb-4">

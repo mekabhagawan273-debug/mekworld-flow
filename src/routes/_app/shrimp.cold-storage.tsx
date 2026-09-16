@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -74,29 +75,31 @@ function ColdStorage() {
         title="Cold Storage Inventory"
         subtitle="Frozen stock by chamber with temperature monitoring"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Stock</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle className="flex items-center gap-2"><Snowflake className="w-5 h-5" />Add to Cold Storage</DialogTitle></DialogHeader>
-              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-                <FF name="product_name" label="Product name" required />
-                <FF name="chamber_no" label="Chamber #" required />
-                <FF name="quantity_kg" label="Quantity (kg)" type="number" step="0.01" required />
-                <FF name="cartons" label="Cartons" type="number" />
-                <FF name="packing_date" label="Packing date" type="date" />
-                <FF name="best_before" label="Best before" type="date" />
-                <FF name="temperature_c" label="Temperature °C" type="number" step="0.1" />
-                <DialogFooter className="col-span-2">
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                  <Button type="submit" disabled={create.isPending}>
-                    {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Add
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="cold_storage" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Stock</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle className="flex items-center gap-2"><Snowflake className="w-5 h-5" />Add to Cold Storage</DialogTitle></DialogHeader>
+                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                  <FF name="product_name" label="Product name" required />
+                  <FF name="chamber_no" label="Chamber #" required />
+                  <FF name="quantity_kg" label="Quantity (kg)" type="number" step="0.01" required />
+                  <FF name="cartons" label="Cartons" type="number" />
+                  <FF name="packing_date" label="Packing date" type="date" />
+                  <FF name="best_before" label="Best before" type="date" />
+                  <FF name="temperature_c" label="Temperature °C" type="number" step="0.1" />
+                  <DialogFooter className="col-span-2">
+                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button type="submit" disabled={create.isPending}>
+                      {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Add
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={columns} searchKeys={["product_name", "chamber_no"]} loading={isLoading} />

@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -40,47 +41,49 @@ function PlantsList() {
         title={<span className="inline-flex items-center gap-2">Plant Management <Badge variant="secondary">{data.length} plants</Badge></span> as any}
         subtitle="Plant master list and operational status"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Plant</Button></DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle>New Plant</DialogTitle></DialogHeader>
-              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({
-                plant_code: String(fd.get("plant_code")), name: String(fd.get("name")),
-                plant_type: String(fd.get("plant_type")), capacity: Number(fd.get("capacity") || 0),
-                status: String(fd.get("status")), supervisor: fd.get("supervisor") || null, location: fd.get("location") || null,
-              }); }} className="grid grid-cols-2 gap-3">
-                <Fld n="plant_code" l="Plant Code" required />
-                <Fld n="name" l="Name" required />
-                <div className="space-y-2"><Label>Type *</Label>
-                  <Select name="plant_type" defaultValue="processing" required>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="processing">Processing Plant</SelectItem>
-                      <SelectItem value="hatchery">Hatchery</SelectItem>
-                      <SelectItem value="ice">Ice Plant</SelectItem>
-                      <SelectItem value="cold_storage">Cold Storage</SelectItem>
-                      <SelectItem value="feed_mill">Feed Mill</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Fld n="capacity" l="Capacity (tons/day)" type="number" step="0.01" />
-                <div className="space-y-2"><Label>Status *</Label>
-                  <Select name="status" defaultValue="running" required>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="running">Running</SelectItem>
-                      <SelectItem value="idle">Idle</SelectItem>
-                      <SelectItem value="maintenance">Maintenance</SelectItem>
-                      <SelectItem value="shutdown">Shutdown</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Fld n="supervisor" l="Supervisor" />
-                <Fld n="location" l="Location" />
-                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="plants" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Plant</Button></DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>New Plant</DialogTitle></DialogHeader>
+                <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({
+                  plant_code: String(fd.get("plant_code")), name: String(fd.get("name")),
+                  plant_type: String(fd.get("plant_type")), capacity: Number(fd.get("capacity") || 0),
+                  status: String(fd.get("status")), supervisor: fd.get("supervisor") || null, location: fd.get("location") || null,
+                }); }} className="grid grid-cols-2 gap-3">
+                  <Fld n="plant_code" l="Plant Code" required />
+                  <Fld n="name" l="Name" required />
+                  <div className="space-y-2"><Label>Type *</Label>
+                    <Select name="plant_type" defaultValue="processing" required>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="processing">Processing Plant</SelectItem>
+                        <SelectItem value="hatchery">Hatchery</SelectItem>
+                        <SelectItem value="ice">Ice Plant</SelectItem>
+                        <SelectItem value="cold_storage">Cold Storage</SelectItem>
+                        <SelectItem value="feed_mill">Feed Mill</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Fld n="capacity" l="Capacity (tons/day)" type="number" step="0.01" />
+                  <div className="space-y-2"><Label>Status *</Label>
+                    <Select name="status" defaultValue="running" required>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="running">Running</SelectItem>
+                        <SelectItem value="idle">Idle</SelectItem>
+                        <SelectItem value="maintenance">Maintenance</SelectItem>
+                        <SelectItem value="shutdown">Shutdown</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Fld n="supervisor" l="Supervisor" />
+                  <Fld n="location" l="Location" />
+                  <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       {data.length === 0 ? <Card className="p-10 text-center text-muted-foreground"><Factory className="w-10 h-10 mx-auto mb-2 opacity-40" />No plants yet</Card>

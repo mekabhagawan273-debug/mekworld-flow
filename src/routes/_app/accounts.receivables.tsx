@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -48,30 +49,32 @@ function Receivables() {
     <div>
       <PageHeader title="Export Receivables" subtitle="Outstanding invoices from international buyers"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Receivable</Button></DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle>New Receivable</DialogTitle></DialogHeader>
-              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ buyer: String(fd.get("buyer")), invoice_no: fd.get("invoice_no"), invoice_value_usd: Number(fd.get("invoice_value_usd") || 0), amount_received: Number(fd.get("amount_received") || 0), due_date: fd.get("due_date") || null, status: String(fd.get("status")) }); }} className="grid grid-cols-2 gap-3">
-                <F n="buyer" l="Buyer" required />
-                <F n="invoice_no" l="Invoice #" />
-                <F n="invoice_value_usd" l="Value (USD)" type="number" step="0.01" required />
-                <F n="amount_received" l="Received" type="number" step="0.01" />
-                <F n="due_date" l="Due Date" type="date" />
-                <div className="space-y-2"><Label>Status *</Label>
-                  <Select name="status" defaultValue="pending" required>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="paid">Paid</SelectItem>
-                      <SelectItem value="partial">Partial</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="accounts" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Receivable</Button></DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>New Receivable</DialogTitle></DialogHeader>
+                <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ buyer: String(fd.get("buyer")), invoice_no: fd.get("invoice_no"), invoice_value_usd: Number(fd.get("invoice_value_usd") || 0), amount_received: Number(fd.get("amount_received") || 0), due_date: fd.get("due_date") || null, status: String(fd.get("status")) }); }} className="grid grid-cols-2 gap-3">
+                  <F n="buyer" l="Buyer" required />
+                  <F n="invoice_no" l="Invoice #" />
+                  <F n="invoice_value_usd" l="Value (USD)" type="number" step="0.01" required />
+                  <F n="amount_received" l="Received" type="number" step="0.01" />
+                  <F n="due_date" l="Due Date" type="date" />
+                  <div className="space-y-2"><Label>Status *</Label>
+                    <Select name="status" defaultValue="pending" required>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="paid">Paid</SelectItem>
+                        <SelectItem value="partial">Partial</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={cols} searchKeys={["buyer", "invoice_no"]} loading={isLoading} />

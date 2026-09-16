@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -86,41 +87,43 @@ function EmployeesTab() {
         <Card className="p-4 flex items-start gap-3"><UserX className="w-5 h-5 text-info mt-1" /><div><div className="text-xs uppercase text-muted-foreground">Contract Labour</div><div className="text-2xl font-bold mt-1">{contract}</div></div></Card>
       </div>
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Employee</Button></DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader><DialogTitle>New Employee</DialogTitle></DialogHeader>
-            <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-              <F name="emp_code" label="Employee Code" required />
-              <F name="full_name" label="Full Name" required />
-              <F name="designation" label="Designation" />
-              <div className="space-y-2"><Label>Department</Label>
-                <Select name="department" defaultValue="Processing">
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{["Processing","Quality Control","Cold Storage","Packing","Stores","HR","Admin","Security","Shipping"].map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2"><Label>Employment Type *</Label>
-                <Select name="emp_type" defaultValue="permanent" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="permanent">Permanent</SelectItem>
-                    <SelectItem value="contract">Contract</SelectItem>
-                    <SelectItem value="daily_wage">Daily Wage</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <F name="date_of_joining" label="Date of Joining" type="date" />
-              <F name="phone" label="Phone" />
-              <F name="email" label="Email" type="email" />
-              <F name="salary" label="Monthly Salary (₹)" type="number" step="0.01" />
-              <DialogFooter className="col-span-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="hr" note >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Employee</Button></DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader><DialogTitle>New Employee</DialogTitle></DialogHeader>
+              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                <F name="emp_code" label="Employee Code" required />
+                <F name="full_name" label="Full Name" required />
+                <F name="designation" label="Designation" />
+                <div className="space-y-2"><Label>Department</Label>
+                  <Select name="department" defaultValue="Processing">
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>{["Processing","Quality Control","Cold Storage","Packing","Stores","HR","Admin","Security","Shipping"].map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2"><Label>Employment Type *</Label>
+                  <Select name="emp_type" defaultValue="permanent" required>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="permanent">Permanent</SelectItem>
+                      <SelectItem value="contract">Contract</SelectItem>
+                      <SelectItem value="daily_wage">Daily Wage</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <F name="date_of_joining" label="Date of Joining" type="date" />
+                <F name="phone" label="Phone" />
+                <F name="email" label="Email" type="email" />
+                <F name="salary" label="Monthly Salary (₹)" type="number" step="0.01" />
+                <DialogFooter className="col-span-2">
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <DataTable data={data} columns={columns} searchKeys={["emp_code", "full_name", "designation", "department"]} loading={isLoading} />
     </div>
@@ -191,51 +194,53 @@ function AttendanceTab() {
         <Card className="p-4"><div className="text-xs uppercase text-muted-foreground">On Leave</div><div className="text-2xl font-bold mt-1 text-info">{leave}</div></Card>
       </div>
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Mark Attendance</Button></DialogTrigger>
-          <DialogContent className="max-w-xl">
-            <DialogHeader><DialogTitle>Mark Attendance</DialogTitle></DialogHeader>
-            <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-              <div className="space-y-2 col-span-2"><Label>Employee *</Label>
-                <Select name="employee_id" required>
-                  <SelectTrigger><SelectValue placeholder="Select employee" /></SelectTrigger>
-                  <SelectContent>{employees.map((e: any) => <SelectItem key={e.id} value={e.id}>{e.emp_code} — {e.full_name}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2"><Label>Date *</Label>
-                <Input name="attendance_date" type="date" defaultValue={date} required />
-              </div>
-              <div className="space-y-2"><Label>Status *</Label>
-                <Select name="status" defaultValue="present" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="present">Present</SelectItem>
-                    <SelectItem value="absent">Absent</SelectItem>
-                    <SelectItem value="leave">On Leave</SelectItem>
-                    <SelectItem value="half_day">Half Day</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2"><Label>Shift *</Label>
-                <Select name="shift" defaultValue="day" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="day">Day</SelectItem>
-                    <SelectItem value="night">Night</SelectItem>
-                    <SelectItem value="general">General</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2"><Label>Hours Worked</Label>
-                <Input name="hours_worked" type="number" step="0.5" defaultValue={8} />
-              </div>
-              <DialogFooter className="col-span-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="hr" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Mark Attendance</Button></DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogHeader><DialogTitle>Mark Attendance</DialogTitle></DialogHeader>
+              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                <div className="space-y-2 col-span-2"><Label>Employee *</Label>
+                  <Select name="employee_id" required>
+                    <SelectTrigger><SelectValue placeholder="Select employee" /></SelectTrigger>
+                    <SelectContent>{employees.map((e: any) => <SelectItem key={e.id} value={e.id}>{e.emp_code} — {e.full_name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2"><Label>Date *</Label>
+                  <Input name="attendance_date" type="date" defaultValue={date} required />
+                </div>
+                <div className="space-y-2"><Label>Status *</Label>
+                  <Select name="status" defaultValue="present" required>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="present">Present</SelectItem>
+                      <SelectItem value="absent">Absent</SelectItem>
+                      <SelectItem value="leave">On Leave</SelectItem>
+                      <SelectItem value="half_day">Half Day</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2"><Label>Shift *</Label>
+                  <Select name="shift" defaultValue="day" required>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="day">Day</SelectItem>
+                      <SelectItem value="night">Night</SelectItem>
+                      <SelectItem value="general">General</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2"><Label>Hours Worked</Label>
+                  <Input name="hours_worked" type="number" step="0.5" defaultValue={8} />
+                </div>
+                <DialogFooter className="col-span-2">
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <DataTable data={data} columns={columns} searchKeys={[]} loading={isLoading} />
     </div>

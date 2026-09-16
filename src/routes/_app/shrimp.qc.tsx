@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -87,56 +88,58 @@ function QC() {
         title="Quality Control"
         subtitle="QC inspections, approvals and rejections per batch"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Inspection</Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-xl">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2"><ShieldCheck className="w-5 h-5" />QC Inspection</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-                <div className="col-span-2 space-y-2">
-                  <Label>Batch</Label>
-                  <Select name="batch_id">
-                    <SelectTrigger><SelectValue placeholder="Select batch..." /></SelectTrigger>
-                    <SelectContent>
-                      {batches.map((b: any) => <SelectItem key={b.id} value={b.id}>{b.batch_id}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="col-span-2 space-y-2">
-                  <Label>Inspector name *</Label>
-                  <Input name="inspector_name" required />
-                </div>
-                <FF name="ph" label="pH" type="number" step="0.01" />
-                <FF name="temperature_c" label="Temperature °C" type="number" step="0.1" />
-                <FF name="bacterial_count" label="Bacterial count" type="number" />
-                <div className="space-y-2">
-                  <Label>Status *</Label>
-                  <Select name="status" defaultValue="approved" required>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="approved">Approved</SelectItem>
-                      <SelectItem value="rejected">Rejected</SelectItem>
-                      <SelectItem value="on_hold">On Hold</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="col-span-2 space-y-2">
-                  <Label>Remarks</Label>
-                  <Textarea name="remarks" rows={2} />
-                </div>
-                <DialogFooter className="col-span-2">
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                  <Button type="submit" disabled={create.isPending}>
-                    {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="qc" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Inspection</Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-xl">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2"><ShieldCheck className="w-5 h-5" />QC Inspection</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2 space-y-2">
+                    <Label>Batch</Label>
+                    <Select name="batch_id">
+                      <SelectTrigger><SelectValue placeholder="Select batch..." /></SelectTrigger>
+                      <SelectContent>
+                        {batches.map((b: any) => <SelectItem key={b.id} value={b.id}>{b.batch_id}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <Label>Inspector name *</Label>
+                    <Input name="inspector_name" required />
+                  </div>
+                  <FF name="ph" label="pH" type="number" step="0.01" />
+                  <FF name="temperature_c" label="Temperature °C" type="number" step="0.1" />
+                  <FF name="bacterial_count" label="Bacterial count" type="number" />
+                  <div className="space-y-2">
+                    <Label>Status *</Label>
+                    <Select name="status" defaultValue="approved" required>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="approved">Approved</SelectItem>
+                        <SelectItem value="rejected">Rejected</SelectItem>
+                        <SelectItem value="on_hold">On Hold</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <Label>Remarks</Label>
+                    <Textarea name="remarks" rows={2} />
+                  </div>
+                  <DialogFooter className="col-span-2">
+                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button type="submit" disabled={create.isPending}>
+                      {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={columns} searchKeys={["inspector_name"]} loading={isLoading} />

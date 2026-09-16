@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -57,31 +58,33 @@ function Purchases() {
     <div>
       <PageHeader title="Purchase Register" subtitle="Supplier invoices and payment status"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Purchase</Button></DialogTrigger>
-            <DialogContent className="max-w-xl">
-              <DialogHeader><DialogTitle>New Purchase</DialogTitle></DialogHeader>
-              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-3">
-                <F n="supplier_name" l="Supplier" required />
-                <F n="invoice_no" l="Invoice #" />
-                <F n="purchase_date" l="Date" type="date" required />
-                <div className="space-y-2"><Label>Payment Status *</Label>
-                  <Select name="payment_status" defaultValue="pending" required>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="paid">Paid</SelectItem>
-                      <SelectItem value="partial">Partial</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="col-span-2"><F n="items" l="Items / Description" /></div>
-                <F n="amount" l="Amount (₹)" type="number" step="0.01" required />
-                <F n="gst_pct" l="GST %" type="number" step="0.01" />
-                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="accounts" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Purchase</Button></DialogTrigger>
+              <DialogContent className="max-w-xl">
+                <DialogHeader><DialogTitle>New Purchase</DialogTitle></DialogHeader>
+                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-3">
+                  <F n="supplier_name" l="Supplier" required />
+                  <F n="invoice_no" l="Invoice #" />
+                  <F n="purchase_date" l="Date" type="date" required />
+                  <div className="space-y-2"><Label>Payment Status *</Label>
+                    <Select name="payment_status" defaultValue="pending" required>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="paid">Paid</SelectItem>
+                        <SelectItem value="partial">Partial</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="col-span-2"><F n="items" l="Items / Description" /></div>
+                  <F n="amount" l="Amount (₹)" type="number" step="0.01" required />
+                  <F n="gst_pct" l="GST %" type="number" step="0.01" />
+                  <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={cols} searchKeys={["supplier_name", "invoice_no"]} loading={isLoading} />
