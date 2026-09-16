@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -83,27 +84,29 @@ function WaterQuality({ pondId }: { pondId: string }) {
   return (
     <div className="space-y-4 mt-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Entry</Button></DialogTrigger>
-          <DialogContent>
-            <DialogHeader><DialogTitle>Water Quality Entry</DialogTitle></DialogHeader>
-            <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({
-              pond_id: pondId, log_date: fd.get("log_date"),
-              ph: Number(fd.get("ph") || 0), do_mgl: Number(fd.get("do_mgl") || 0),
-              salinity_ppt: Number(fd.get("salinity_ppt") || 0), temperature_c: Number(fd.get("temperature_c") || 0),
-              ammonia_mgl: Number(fd.get("ammonia_mgl") || 0), recorded_by: String(fd.get("recorded_by") || ""),
-            }); }} className="grid grid-cols-2 gap-3">
-              <In n="log_date" l="Date" type="date" required />
-              <In n="ph" l="pH" type="number" step="0.01" />
-              <In n="do_mgl" l="DO (mg/L)" type="number" step="0.01" />
-              <In n="salinity_ppt" l="Salinity (ppt)" type="number" step="0.01" />
-              <In n="temperature_c" l="Temp (°C)" type="number" step="0.1" />
-              <In n="ammonia_mgl" l="Ammonia (mg/L)" type="number" step="0.01" />
-              <In n="recorded_by" l="Recorded By" />
-              <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="ponds" note >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Entry</Button></DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Water Quality Entry</DialogTitle></DialogHeader>
+              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({
+                pond_id: pondId, log_date: fd.get("log_date"),
+                ph: Number(fd.get("ph") || 0), do_mgl: Number(fd.get("do_mgl") || 0),
+                salinity_ppt: Number(fd.get("salinity_ppt") || 0), temperature_c: Number(fd.get("temperature_c") || 0),
+                ammonia_mgl: Number(fd.get("ammonia_mgl") || 0), recorded_by: String(fd.get("recorded_by") || ""),
+              }); }} className="grid grid-cols-2 gap-3">
+                <In n="log_date" l="Date" type="date" required />
+                <In n="ph" l="pH" type="number" step="0.01" />
+                <In n="do_mgl" l="DO (mg/L)" type="number" step="0.01" />
+                <In n="salinity_ppt" l="Salinity (ppt)" type="number" step="0.01" />
+                <In n="temperature_c" l="Temp (°C)" type="number" step="0.1" />
+                <In n="ammonia_mgl" l="Ammonia (mg/L)" type="number" step="0.01" />
+                <In n="recorded_by" l="Recorded By" />
+                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <Card className="p-4"><h4 className="font-semibold mb-2">Last 14 days — pH & DO</h4>
         <ResponsiveContainer width="100%" height={220}>
@@ -135,19 +138,21 @@ function LogTab({ pondId, table, title, dateField = "log_date", fields }: { pond
   return (
     <div className="space-y-4 mt-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add {title}</Button></DialogTrigger>
-          <DialogContent>
-            <DialogHeader><DialogTitle>{title}</DialogTitle></DialogHeader>
-            <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); const p: any = { pond_id: pondId, [dateField]: fd.get(dateField) };
-              fields.forEach(([k, , t]) => { const v = fd.get(k); p[k] = t === "number" ? Number(v || 0) : (v || null); });
-              create.mutate(p); }} className="grid grid-cols-2 gap-3">
-              <In n={dateField} l="Date" type="date" required />
-              {fields.map(([k, l, t]) => <In key={k} n={k} l={l} type={t} step={t === "number" ? "0.01" : undefined} />)}
-              <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="ponds" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add {title}</Button></DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>{title}</DialogTitle></DialogHeader>
+              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); const p: any = { pond_id: pondId, [dateField]: fd.get(dateField) };
+                fields.forEach(([k, , t]) => { const v = fd.get(k); p[k] = t === "number" ? Number(v || 0) : (v || null); });
+                create.mutate(p); }} className="grid grid-cols-2 gap-3">
+                <In n={dateField} l="Date" type="date" required />
+                {fields.map(([k, l, t]) => <In key={k} n={k} l={l} type={t} step={t === "number" ? "0.01" : undefined} />)}
+                <DialogFooter className="col-span-2"><Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button></DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <Card className="overflow-auto"><table className="w-full text-sm"><thead className="bg-muted"><tr><th className="p-2 text-left">Date</th>{fields.map(([k, l]) => <th key={k} className="p-2 text-left">{l}</th>)}</tr></thead>
         <tbody>{data.length === 0 ? <tr><td colSpan={fields.length + 1} className="p-4 text-center text-muted-foreground">No entries</td></tr>

@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -72,20 +73,22 @@ function MachinesTab({ plantId }: { plantId: string }) {
   return (
     <div className="space-y-4 mt-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Machine</Button></DialogTrigger>
-          <DialogContent>
-            <DialogHeader><DialogTitle>New Machine</DialogTitle></DialogHeader>
-            <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, machine_name: String(fd.get("machine_name")), make_model: fd.get("make_model"), serial_no: fd.get("serial_no"), last_service_date: fd.get("last_service_date") || null, next_service_due: fd.get("next_service_due") || null }); }} className="grid grid-cols-2 gap-3">
-              <In n="machine_name" l="Name" required />
-              <In n="make_model" l="Make/Model" />
-              <In n="serial_no" l="Serial No" />
-              <In n="last_service_date" l="Last Service" type="date" />
-              <In n="next_service_due" l="Next Service" type="date" />
-              <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="plants" note >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Machine</Button></DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>New Machine</DialogTitle></DialogHeader>
+              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, machine_name: String(fd.get("machine_name")), make_model: fd.get("make_model"), serial_no: fd.get("serial_no"), last_service_date: fd.get("last_service_date") || null, next_service_due: fd.get("next_service_due") || null }); }} className="grid grid-cols-2 gap-3">
+                <In n="machine_name" l="Name" required />
+                <In n="make_model" l="Make/Model" />
+                <In n="serial_no" l="Serial No" />
+                <In n="last_service_date" l="Last Service" type="date" />
+                <In n="next_service_due" l="Next Service" type="date" />
+                <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <Card className="overflow-auto"><table className="w-full text-sm"><thead className="bg-muted"><tr>{["Machine","Make/Model","Serial","Last Service","Next Service"].map(h => <th key={h} className="p-2 text-left">{h}</th>)}</tr></thead>
         <tbody>{data.length === 0 ? <tr><td colSpan={5} className="p-4 text-center text-muted-foreground">No machines</td></tr> : data.map((m: any) => (
@@ -106,19 +109,21 @@ function ProductionTab({ plantId }: { plantId: string }) {
   return (
     <div className="space-y-4 mt-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Log Production</Button></DialogTrigger>
-          <DialogContent>
-            <DialogHeader><DialogTitle>Production Entry</DialogTitle></DialogHeader>
-            <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, log_date: fd.get("log_date"), planned_kg: Number(fd.get("planned_kg") || 0), actual_kg: Number(fd.get("actual_kg") || 0), recorded_by: fd.get("recorded_by") }); }} className="grid grid-cols-2 gap-3">
-              <In n="log_date" l="Date" type="date" required />
-              <In n="planned_kg" l="Planned (kg)" type="number" step="0.01" />
-              <In n="actual_kg" l="Actual (kg)" type="number" step="0.01" />
-              <In n="recorded_by" l="By" />
-              <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="plants" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Log Production</Button></DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Production Entry</DialogTitle></DialogHeader>
+              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, log_date: fd.get("log_date"), planned_kg: Number(fd.get("planned_kg") || 0), actual_kg: Number(fd.get("actual_kg") || 0), recorded_by: fd.get("recorded_by") }); }} className="grid grid-cols-2 gap-3">
+                <In n="log_date" l="Date" type="date" required />
+                <In n="planned_kg" l="Planned (kg)" type="number" step="0.01" />
+                <In n="actual_kg" l="Actual (kg)" type="number" step="0.01" />
+                <In n="recorded_by" l="By" />
+                <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <Card className="p-4"><h4 className="font-semibold mb-2">Last 30 days — Planned vs Actual</h4>
         <ResponsiveContainer width="100%" height={240}><LineChart data={chart}><CartesianGrid strokeDasharray="3 3" opacity={0.2} /><XAxis dataKey="d" fontSize={11} /><YAxis fontSize={11} /><Tooltip /><Legend />
@@ -140,22 +145,24 @@ function BreakdownsTab({ plantId }: { plantId: string }) {
   return (
     <div className="space-y-4 mt-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Log Breakdown</Button></DialogTrigger>
-          <DialogContent>
-            <DialogHeader><DialogTitle>Breakdown Entry</DialogTitle></DialogHeader>
-            <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, machine_name: fd.get("machine_name"), start_time: fd.get("start_time") || new Date().toISOString(), resolved_time: fd.get("resolved_time") || null, issue: fd.get("issue"), technician: fd.get("technician"), root_cause: fd.get("root_cause"), corrective_action: fd.get("corrective_action") }); }} className="grid grid-cols-2 gap-3">
-              <In n="machine_name" l="Machine" required />
-              <In n="technician" l="Technician" />
-              <In n="start_time" l="Start" type="datetime-local" />
-              <In n="resolved_time" l="Resolved" type="datetime-local" />
-              <In n="issue" l="Issue" />
-              <In n="root_cause" l="Root Cause" />
-              <div className="col-span-2"><In n="corrective_action" l="Corrective Action" /></div>
-              <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="plants" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Log Breakdown</Button></DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Breakdown Entry</DialogTitle></DialogHeader>
+              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, machine_name: fd.get("machine_name"), start_time: fd.get("start_time") || new Date().toISOString(), resolved_time: fd.get("resolved_time") || null, issue: fd.get("issue"), technician: fd.get("technician"), root_cause: fd.get("root_cause"), corrective_action: fd.get("corrective_action") }); }} className="grid grid-cols-2 gap-3">
+                <In n="machine_name" l="Machine" required />
+                <In n="technician" l="Technician" />
+                <In n="start_time" l="Start" type="datetime-local" />
+                <In n="resolved_time" l="Resolved" type="datetime-local" />
+                <In n="issue" l="Issue" />
+                <In n="root_cause" l="Root Cause" />
+                <div className="col-span-2"><In n="corrective_action" l="Corrective Action" /></div>
+                <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <Card className="overflow-auto"><table className="w-full text-sm"><thead className="bg-muted"><tr>{["Machine","Start","Issue","Tech","Downtime (h)","Root Cause"].map(h => <th key={h} className="p-2 text-left">{h}</th>)}</tr></thead>
         <tbody>{data.map((r: any) => { const dt = r.resolved_time ? differenceInHours(new Date(r.resolved_time), new Date(r.start_time)) : "—"; return <tr key={r.id} className="border-t"><td className="p-2">{r.machine_name}</td><td className="p-2">{format(new Date(r.start_time), "dd MMM HH:mm")}</td><td className="p-2">{r.issue ?? "—"}</td><td className="p-2">{r.technician ?? "—"}</td><td className="p-2">{dt}</td><td className="p-2">{r.root_cause ?? "—"}</td></tr>; })}</tbody>
@@ -172,19 +179,21 @@ function ConsumptionTab({ plantId }: { plantId: string }) {
   return (
     <div className="space-y-4 mt-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Log Consumption</Button></DialogTrigger>
-          <DialogContent>
-            <DialogHeader><DialogTitle>Consumption Entry</DialogTitle></DialogHeader>
-            <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, log_date: fd.get("log_date"), energy_kwh: Number(fd.get("energy_kwh") || 0), water_kl: Number(fd.get("water_kl") || 0), recorded_by: fd.get("recorded_by") }); }} className="grid grid-cols-2 gap-3">
-              <In n="log_date" l="Date" type="date" required />
-              <In n="energy_kwh" l="Energy (kWh)" type="number" step="0.01" />
-              <In n="water_kl" l="Water (kL)" type="number" step="0.01" />
-              <In n="recorded_by" l="By" />
-              <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="plants" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button size="sm" className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Log Consumption</Button></DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Consumption Entry</DialogTitle></DialogHeader>
+              <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); create.mutate({ plant_id: plantId, log_date: fd.get("log_date"), energy_kwh: Number(fd.get("energy_kwh") || 0), water_kl: Number(fd.get("water_kl") || 0), recorded_by: fd.get("recorded_by") }); }} className="grid grid-cols-2 gap-3">
+                <In n="log_date" l="Date" type="date" required />
+                <In n="energy_kwh" l="Energy (kWh)" type="number" step="0.01" />
+                <In n="water_kl" l="Water (kL)" type="number" step="0.01" />
+                <In n="recorded_by" l="By" />
+                <DialogFooter className="col-span-2"><Button type="submit">Save</Button></DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <Card className="overflow-auto"><table className="w-full text-sm"><thead className="bg-muted"><tr>{["Date","Energy kWh","Water kL","By"].map(h => <th key={h} className="p-2 text-left">{h}</th>)}</tr></thead>
         <tbody>{data.map((r: any) => <tr key={r.id} className="border-t"><td className="p-2">{format(new Date(r.log_date), "dd MMM yy")}</td><td className="p-2">{r.energy_kwh}</td><td className="p-2">{r.water_kl}</td><td className="p-2">{r.recorded_by ?? "—"}</td></tr>)}</tbody>

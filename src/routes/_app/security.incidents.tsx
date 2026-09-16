@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -72,45 +73,47 @@ function Incidents() {
         title="Incident Register"
         subtitle="All safety and security incidents on the premises"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-destructive text-destructive-foreground hover:bg-destructive/90"><Plus className="w-4 h-4 mr-2" />Log Incident</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle className="flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-destructive" />Log Incident</DialogTitle></DialogHeader>
-              <form onSubmit={onSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Type *</Label>
-                    <Select name="incident_type" defaultValue="Near Miss" required>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>{TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
-                    </Select>
+          <WriteGate module="incidents" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-destructive text-destructive-foreground hover:bg-destructive/90"><Plus className="w-4 h-4 mr-2" />Log Incident</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle className="flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-destructive" />Log Incident</DialogTitle></DialogHeader>
+                <form onSubmit={onSubmit} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Type *</Label>
+                      <Select name="incident_type" defaultValue="Near Miss" required>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>{TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Status *</Label>
+                      <Select name="status" defaultValue="Open" required>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Open">Open</SelectItem>
+                          <SelectItem value="Under Investigation">Under Investigation</SelectItem>
+                          <SelectItem value="Closed">Closed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label>Status *</Label>
-                    <Select name="status" defaultValue="Open" required>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Open">Open</SelectItem>
-                        <SelectItem value="Under Investigation">Under Investigation</SelectItem>
-                        <SelectItem value="Closed">Closed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="space-y-2"><Label>Description *</Label><Textarea name="description" rows={3} required /></div>
-                <div className="space-y-2"><Label>Persons involved</Label><Input name="persons_involved" /></div>
-                <div className="space-y-2"><Label>Action taken</Label><Textarea name="action_taken" rows={2} /></div>
-                <DialogFooter>
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                  <Button type="submit" disabled={create.isPending}>
-                    {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+                  <div className="space-y-2"><Label>Description *</Label><Textarea name="description" rows={3} required /></div>
+                  <div className="space-y-2"><Label>Persons involved</Label><Input name="persons_involved" /></div>
+                  <div className="space-y-2"><Label>Action taken</Label><Textarea name="action_taken" rows={2} /></div>
+                  <DialogFooter>
+                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button type="submit" disabled={create.isPending}>
+                      {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={columns} searchKeys={["description", "incident_type", "persons_involved"]} loading={isLoading} />

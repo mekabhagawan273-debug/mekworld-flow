@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -152,58 +153,60 @@ function ShrimpIntake() {
         actions={
           <>
             <Button variant="outline" onClick={exportXlsx}><Download className="w-4 h-4 mr-2" />Excel</Button>
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-teal text-teal-foreground hover:bg-teal/90">
-                  <Plus className="w-4 h-4 mr-2" />New Intake
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2"><Fish className="w-5 h-5" />New Shrimp Intake</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-                  <Field name="supplier_name" label="Supplier name" required />
-                  <Field name="vehicle_number" label="Vehicle number" />
-                  <div className="space-y-2">
-                    <Label>Species *</Label>
-                    <Select name="species" defaultValue="Vannamei" required>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Vannamei">Vannamei</SelectItem>
-                        <SelectItem value="Tiger">Tiger</SelectItem>
-                        <SelectItem value="Black Tiger">Black Tiger</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Quality grade</Label>
-                    <Select name="quality_grade" defaultValue="A">
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {["A", "B", "C"].map((g) => <SelectItem key={g} value={g}>Grade {g}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Field name="quantity_kg" label="Quantity (kg)" type="number" step="0.01" required />
-                  <Field name="count_per_kg" label="Count / kg (pieces)" type="number" step="1" />
-                  <Field name="price_per_kg" label="Price per kg (₹)" type="number" step="0.01" />
-                  <Field name="moisture_pct" label="Moisture %" type="number" step="0.01" />
-                  <Field name="temperature_c" label="Temperature °C" type="number" step="0.1" />
-                  <div className="col-span-2 space-y-2">
-                    <Label>Remarks</Label>
-                    <Textarea name="remarks" rows={2} />
-                  </div>
-                  <DialogFooter className="col-span-2">
-                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                    <Button type="submit" disabled={create.isPending}>
-                      {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                      Save Intake
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <WriteGate module="intake" note >
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-teal text-teal-foreground hover:bg-teal/90">
+                    <Plus className="w-4 h-4 mr-2" />New Intake
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2"><Fish className="w-5 h-5" />New Shrimp Intake</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                    <Field name="supplier_name" label="Supplier name" required />
+                    <Field name="vehicle_number" label="Vehicle number" />
+                    <div className="space-y-2">
+                      <Label>Species *</Label>
+                      <Select name="species" defaultValue="Vannamei" required>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Vannamei">Vannamei</SelectItem>
+                          <SelectItem value="Tiger">Tiger</SelectItem>
+                          <SelectItem value="Black Tiger">Black Tiger</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Quality grade</Label>
+                      <Select name="quality_grade" defaultValue="A">
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {["A", "B", "C"].map((g) => <SelectItem key={g} value={g}>Grade {g}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Field name="quantity_kg" label="Quantity (kg)" type="number" step="0.01" required />
+                    <Field name="count_per_kg" label="Count / kg (pieces)" type="number" step="1" />
+                    <Field name="price_per_kg" label="Price per kg (₹)" type="number" step="0.01" />
+                    <Field name="moisture_pct" label="Moisture %" type="number" step="0.01" />
+                    <Field name="temperature_c" label="Temperature °C" type="number" step="0.1" />
+                    <div className="col-span-2 space-y-2">
+                      <Label>Remarks</Label>
+                      <Textarea name="remarks" rows={2} />
+                    </div>
+                    <DialogFooter className="col-span-2">
+                      <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                      <Button type="submit" disabled={create.isPending}>
+                        {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                        Save Intake
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </WriteGate>
           </>
         }
       />

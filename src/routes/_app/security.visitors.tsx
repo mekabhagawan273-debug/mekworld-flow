@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -79,28 +80,30 @@ function Visitors() {
         title="Visitor Management"
         subtitle="Register and track every visitor in the facility"
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Visitor</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader><DialogTitle className="flex items-center gap-2"><Users className="w-5 h-5" />Register Visitor</DialogTitle></DialogHeader>
-              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-                <FF name="visitor_name" label="Visitor name" required />
-                <FF name="id_type" label="ID type (Aadhar / PAN)" />
-                <FF name="id_number" label="ID number" />
-                <FF name="vehicle_number" label="Vehicle number" />
-                <FF name="host_employee" label="Host employee" />
-                <FF name="purpose" label="Purpose of visit" />
-                <DialogFooter className="col-span-2">
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                  <Button type="submit" disabled={create.isPending}>
-                    {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Check In
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <WriteGate module="visitors" note >
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Visitor</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle className="flex items-center gap-2"><Users className="w-5 h-5" />Register Visitor</DialogTitle></DialogHeader>
+                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                  <FF name="visitor_name" label="Visitor name" required />
+                  <FF name="id_type" label="ID type (Aadhar / PAN)" />
+                  <FF name="id_number" label="ID number" />
+                  <FF name="vehicle_number" label="Vehicle number" />
+                  <FF name="host_employee" label="Host employee" />
+                  <FF name="purpose" label="Purpose of visit" />
+                  <DialogFooter className="col-span-2">
+                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button type="submit" disabled={create.isPending}>
+                      {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Check In
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </WriteGate>
         }
       />
       <DataTable data={data} columns={columns} searchKeys={["visitor_name", "host_employee", "vehicle_number"]} loading={isLoading} />

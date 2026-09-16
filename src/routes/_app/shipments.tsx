@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -109,51 +110,53 @@ function ShipmentsTab() {
         <Card className="p-4"><div className="text-xs uppercase text-muted-foreground">Total Export Value (USD)</div><div className="text-2xl font-bold mt-1">${totalValue.toLocaleString()}</div></Card>
       </div>
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Shipment</Button></DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader><DialogTitle>New Shipment</DialogTitle></DialogHeader>
-            <form onSubmit={onSubmit} className="grid grid-cols-3 gap-4">
-              <div className="space-y-2 col-span-2"><Label>Customer</Label>
-                <Select name="customer_id">
-                  <SelectTrigger><SelectValue placeholder="Select customer" /></SelectTrigger>
-                  <SelectContent>{customers.map((c: any) => <SelectItem key={c.id} value={c.id}>{c.name} ({c.country})</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2"><Label>Status</Label>
-                <Select name="status" defaultValue="planned">
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {["planned","loading","in_transit","delivered","cancelled"].map(s =>
-                      <SelectItem key={s} value={s}>{s.replace("_", " ")}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <F name="container_no" label="Container No" />
-              <F name="bl_no" label="BL Number" />
-              <F name="vessel_name" label="Vessel Name" />
-              <F name="port_of_loading" label="Port of Loading" />
-              <F name="port_of_discharge" label="Port of Discharge" />
-              <F name="destination_country" label="Destination Country" />
-              <F name="ship_date" label="Ship Date" type="date" />
-              <F name="eta" label="ETA" type="date" />
-              <F name="total_quantity_kg" label="Total Qty (kg)" type="number" step="0.01" />
-              <F name="total_cartons" label="Total Cartons" type="number" />
-              <F name="invoice_value" label="Invoice Value" type="number" step="0.01" />
-              <div className="space-y-2"><Label>Currency</Label>
-                <Select name="currency" defaultValue="USD">
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{["USD","EUR","GBP","JPY","INR"].map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="col-span-3 space-y-2"><Label>Notes</Label><Textarea name="notes" rows={2} /></div>
-              <DialogFooter className="col-span-3">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Create Shipment</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="shipments" note >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />New Shipment</Button></DialogTrigger>
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader><DialogTitle>New Shipment</DialogTitle></DialogHeader>
+              <form onSubmit={onSubmit} className="grid grid-cols-3 gap-4">
+                <div className="space-y-2 col-span-2"><Label>Customer</Label>
+                  <Select name="customer_id">
+                    <SelectTrigger><SelectValue placeholder="Select customer" /></SelectTrigger>
+                    <SelectContent>{customers.map((c: any) => <SelectItem key={c.id} value={c.id}>{c.name} ({c.country})</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2"><Label>Status</Label>
+                  <Select name="status" defaultValue="planned">
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {["planned","loading","in_transit","delivered","cancelled"].map(s =>
+                        <SelectItem key={s} value={s}>{s.replace("_", " ")}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <F name="container_no" label="Container No" />
+                <F name="bl_no" label="BL Number" />
+                <F name="vessel_name" label="Vessel Name" />
+                <F name="port_of_loading" label="Port of Loading" />
+                <F name="port_of_discharge" label="Port of Discharge" />
+                <F name="destination_country" label="Destination Country" />
+                <F name="ship_date" label="Ship Date" type="date" />
+                <F name="eta" label="ETA" type="date" />
+                <F name="total_quantity_kg" label="Total Qty (kg)" type="number" step="0.01" />
+                <F name="total_cartons" label="Total Cartons" type="number" />
+                <F name="invoice_value" label="Invoice Value" type="number" step="0.01" />
+                <div className="space-y-2"><Label>Currency</Label>
+                  <Select name="currency" defaultValue="USD">
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>{["USD","EUR","GBP","JPY","INR"].map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-3 space-y-2"><Label>Notes</Label><Textarea name="notes" rows={2} /></div>
+                <DialogFooter className="col-span-3">
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Create Shipment</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <DataTable data={data} columns={columns} searchKeys={["shipment_no", "container_no", "bl_no", "vessel_name"]} loading={isLoading} />
     </div>
@@ -192,24 +195,26 @@ function CustomersTab() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Customer</Button></DialogTrigger>
-          <DialogContent className="max-w-xl">
-            <DialogHeader><DialogTitle>New Customer</DialogTitle></DialogHeader>
-            <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-              <F name="name" label="Customer Name" required />
-              <F name="country" label="Country" />
-              <F name="contact_person" label="Contact Person" />
-              <F name="phone" label="Phone" />
-              <F name="email" label="Email" type="email" />
-              <div className="col-span-2 space-y-2"><Label>Address</Label><Textarea name="address" rows={2} /></div>
-              <DialogFooter className="col-span-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <WriteGate module="shipments" >
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Customer</Button></DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogHeader><DialogTitle>New Customer</DialogTitle></DialogHeader>
+              <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                <F name="name" label="Customer Name" required />
+                <F name="country" label="Country" />
+                <F name="contact_person" label="Contact Person" />
+                <F name="phone" label="Phone" />
+                <F name="email" label="Email" type="email" />
+                <div className="col-span-2 space-y-2"><Label>Address</Label><Textarea name="address" rows={2} /></div>
+                <DialogFooter className="col-span-2">
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </WriteGate>
       </div>
       <DataTable data={data} columns={columns} searchKeys={["name", "country", "email"]} loading={isLoading} />
     </div>

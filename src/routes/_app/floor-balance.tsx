@@ -1,3 +1,4 @@
+import { WriteGate } from "@/components/WriteGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -110,69 +111,73 @@ function FloorBalance() {
         actions={
           <div className="flex gap-2">
             <Button asChild variant="outline"><Link to="/floor-balance/history"><History className="w-4 h-4 mr-2" />History</Link></Button>
-            <Dialog open={shiftOpen} onOpenChange={setShiftOpen}>
-              <DialogTrigger asChild><Button variant="outline"><ClipboardCheck className="w-4 h-4 mr-2" />Close Shift</Button></DialogTrigger>
-              <DialogContent>
-                <DialogHeader><DialogTitle>Close Shift & Sign Snapshot</DialogTitle></DialogHeader>
-                <form onSubmit={onCloseShift} className="space-y-4">
-                  <div className="space-y-2"><Label>Shift *</Label>
-                    <Select name="shift" defaultValue="morning" required>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="morning">Morning</SelectItem>
-                        <SelectItem value="evening">Evening</SelectItem>
-                        <SelectItem value="night">Night</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2"><Label>Supervisor Name *</Label><Input name="supervisor_name" required placeholder="Type your name to sign" /></div>
-                  <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => setShiftOpen(false)}>Cancel</Button>
-                    <Button type="submit" disabled={snap.isPending}>{snap.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Confirm & Sign</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Floor Entry</Button></DialogTrigger>
-              <DialogContent className="max-w-xl">
-                <DialogHeader><DialogTitle>New Floor Entry</DialogTitle></DialogHeader>
-                <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
-                  <div className="col-span-2 space-y-2"><Label>Material *</Label>
-                    <Select name="material_id" required>
-                      <SelectTrigger><SelectValue placeholder="Select material" /></SelectTrigger>
-                      <SelectContent>{materials.map((m: any) => <SelectItem key={m.id} value={m.id}>{m.code} — {m.name}</SelectItem>)}</SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2"><Label>Type *</Label>
-                    <Select name="entry_type" defaultValue="receipt" required>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="receipt">Receipt</SelectItem>
-                        <SelectItem value="issue">Issue / Used</SelectItem>
-                        <SelectItem value="adjustment">Adjustment</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2"><Label>Shift</Label>
-                    <Select name="shift" defaultValue="morning">
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="morning">Morning</SelectItem>
-                        <SelectItem value="evening">Evening</SelectItem>
-                        <SelectItem value="night">Night</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="col-span-2 space-y-2"><Label>Quantity *</Label><Input name="quantity" type="number" step="0.01" required /></div>
-                  <div className="col-span-2 space-y-2"><Label>Remarks</Label><Textarea name="remarks" rows={2} /></div>
-                  <DialogFooter className="col-span-2">
-                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                    <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <WriteGate module="floor_balance" note >
+              <Dialog open={shiftOpen} onOpenChange={setShiftOpen}>
+                <DialogTrigger asChild><Button variant="outline"><ClipboardCheck className="w-4 h-4 mr-2" />Close Shift</Button></DialogTrigger>
+                <DialogContent>
+                  <DialogHeader><DialogTitle>Close Shift & Sign Snapshot</DialogTitle></DialogHeader>
+                  <form onSubmit={onCloseShift} className="space-y-4">
+                    <div className="space-y-2"><Label>Shift *</Label>
+                      <Select name="shift" defaultValue="morning" required>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="morning">Morning</SelectItem>
+                          <SelectItem value="evening">Evening</SelectItem>
+                          <SelectItem value="night">Night</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2"><Label>Supervisor Name *</Label><Input name="supervisor_name" required placeholder="Type your name to sign" /></div>
+                    <DialogFooter>
+                      <Button type="button" variant="outline" onClick={() => setShiftOpen(false)}>Cancel</Button>
+                      <Button type="submit" disabled={snap.isPending}>{snap.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Confirm & Sign</Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </WriteGate>
+            <WriteGate module="floor_balance" >
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild><Button className="bg-teal text-teal-foreground hover:bg-teal/90"><Plus className="w-4 h-4 mr-2" />Add Floor Entry</Button></DialogTrigger>
+                <DialogContent className="max-w-xl">
+                  <DialogHeader><DialogTitle>New Floor Entry</DialogTitle></DialogHeader>
+                  <form onSubmit={onSubmit} className="grid grid-cols-2 gap-4">
+                    <div className="col-span-2 space-y-2"><Label>Material *</Label>
+                      <Select name="material_id" required>
+                        <SelectTrigger><SelectValue placeholder="Select material" /></SelectTrigger>
+                        <SelectContent>{materials.map((m: any) => <SelectItem key={m.id} value={m.id}>{m.code} — {m.name}</SelectItem>)}</SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2"><Label>Type *</Label>
+                      <Select name="entry_type" defaultValue="receipt" required>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="receipt">Receipt</SelectItem>
+                          <SelectItem value="issue">Issue / Used</SelectItem>
+                          <SelectItem value="adjustment">Adjustment</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2"><Label>Shift</Label>
+                      <Select name="shift" defaultValue="morning">
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="morning">Morning</SelectItem>
+                          <SelectItem value="evening">Evening</SelectItem>
+                          <SelectItem value="night">Night</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="col-span-2 space-y-2"><Label>Quantity *</Label><Input name="quantity" type="number" step="0.01" required /></div>
+                    <div className="col-span-2 space-y-2"><Label>Remarks</Label><Textarea name="remarks" rows={2} /></div>
+                    <DialogFooter className="col-span-2">
+                      <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                      <Button type="submit" disabled={create.isPending}>{create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Save</Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </WriteGate>
           </div>
         }
       />
